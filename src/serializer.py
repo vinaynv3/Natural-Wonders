@@ -21,6 +21,7 @@ class LocationsSchema(ma.SQLAlchemySchema):
     about = ma.auto_field()
     pic = ma.auto_field()
     country = ma.auto_field()
+    slug = ma.auto_field()
     datetime = ma.auto_field()
 
 

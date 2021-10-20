@@ -6,8 +6,8 @@ from flask import Flask
 def create_app(test_config=None):
 
     """
-    function creates app along initialization of configurations
-    are done realtive to instance path
+    function creates app, then loads configurations
+    details from instance path
     """
     app = Flask(__name__, instance_relative_config=True)
     if test_config is None:
@@ -25,5 +25,7 @@ def create_app(test_config=None):
     database.init_db(app)
     from . import serializer
     serializer.init_marshmallow(app)
+    from . import routes
+    routes.app_routes(app)
 
     return app

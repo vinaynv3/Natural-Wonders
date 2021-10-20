@@ -1,6 +1,7 @@
 from datetime import datetime
 from .database import db
 
+
 # Locations table: Stores landscape details
 class Locations(db.Model):
     id = db.Column(db.Integer,autoincrement=True, unique=True, primary_key=True)
@@ -8,6 +9,7 @@ class Locations(db.Model):
     country = db.Column(db.String(50), nullable=False)
     about = db.Column(db.Text, nullable=False)
     pic = db.Column(db.String(50), nullable=False)
+    slug = db.Column(db.String(50), nullable=False)
     datetime = db.Column(db.DateTime, nullable=True,
                               default=datetime.utcnow)
 
@@ -53,7 +55,7 @@ class Stats(db.Model):
 # Species table: Stores landscape biological & botanical information
 class Species(db.Model):
     id = db.Column(db.Integer, unique=True, primary_key=True)
-    species_name = db.Column(db.Text, nullable=False)
+    species_name = db.Column(db.String(50), nullable=False)
     image = db.Column(db.String(50), nullable=True)
     locations_id =db.Column(db.Integer, db.ForeignKey('locations.id',ondelete='CASCADE')
                                 ,nullable=False)
