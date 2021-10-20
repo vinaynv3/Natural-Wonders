@@ -5,7 +5,7 @@ from .models import *
 """
 ma : Marshmallow,
 object serialization/deserialization schema
-integrated to Flask-SQLAlchemy models
+integrated with Flask-SQLAlchemy models
 """
 ma = Marshmallow()
 
@@ -19,6 +19,7 @@ class LocationsSchema(ma.SQLAlchemySchema):
     id = ma.auto_field()
     name = ma.auto_field()
     about = ma.auto_field()
+    pic = ma.auto_field()
     country = ma.auto_field()
     datetime = ma.auto_field()
 
@@ -40,13 +41,8 @@ class StatsSchema(ma.SQLAlchemySchema):
     unesco_heritage = ma.auto_field()
 
 
-class FloraFaunaSchema(ma.SQLAlchemySchema):
+class SpeciesSchema(ma.SQLAlchemySchema):
     class Meta:
-        model = FloraFauna
-    species = ma.auto_field()
-
-
-class PicturesSchema(ma.SQLAlchemySchema):
-    class Meta:
-        model = Pictures
-    pic_path = ma.auto_field()
+        model = Species
+    species_name = ma.auto_field()
+    locations_id = ma.auto_field()

@@ -5,6 +5,7 @@ __pycache__/
 
 instance/
 
+db_bkp/
 .pytest_cache/
 .coverage
 htmlcov/
