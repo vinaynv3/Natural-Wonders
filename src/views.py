@@ -13,6 +13,11 @@ class IndexAPI(MethodView):
 class LocationsAPI(MethodView):
 
     def get(self):
-        locations = Locations.query.get(1)
-        ls = LocationsSchema()
-        return ls.dump(locations)
+        locations = Locations.query.all()
+        locations_schema = LocationsSchema(many=True)
+        data = dict(natural_wonders=locations_schema.dump(locations),
+                    total=len(locations))
+        return data
+
+    def post(self,**kwargs):
+        pass

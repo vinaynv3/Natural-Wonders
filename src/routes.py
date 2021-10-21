@@ -13,4 +13,4 @@ def register_api(view, endpoint, url):
 def app_routes(app):
     with app.app_context():
         register_api(IndexAPI, 'index', '/')
-        register_api(LocationsAPI, 'locations', '/locations')
+        register_api(LocationsAPI, 'locations', '/locations/')

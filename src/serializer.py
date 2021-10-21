@@ -13,18 +13,6 @@ def init_marshmallow(app):
     with app.app_context():
         ma.init_app(current_app)
 
-class LocationsSchema(ma.SQLAlchemySchema):
-    class Meta:
-        model = Locations
-    id = ma.auto_field()
-    name = ma.auto_field()
-    about = ma.auto_field()
-    pic = ma.auto_field()
-    country = ma.auto_field()
-    slug = ma.auto_field()
-    datetime = ma.auto_field()
-
-
 class GeographySchema(ma.SQLAlchemySchema):
     class Meta:
         model = Geography
@@ -46,4 +34,20 @@ class SpeciesSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Species
     species_name = ma.auto_field()
-    locations_id = ma.auto_field()
+    image = ma.auto_field()
+
+class LocationsSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Locations
+        ordered = True
+
+    id = ma.auto_field()
+    name = ma.auto_field()
+    about = ma.auto_field()
+    pic = ma.auto_field()
+    country = ma.auto_field()
+    slug = ma.auto_field()
+    datetime = ma.auto_field()
+    geography = ma.Nested(GeographySchema)
+    stats = ma.Nested(StatsSchema)
+    species = ma.Nested(SpeciesSchema,many=True)

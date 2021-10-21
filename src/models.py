@@ -1,5 +1,6 @@
 from datetime import datetime
 from .database import db
+from slugify import slugify
 
 
 # Locations table: Stores landscape details
@@ -21,6 +22,13 @@ class Locations(db.Model):
     species = db.relationship('Species', backref='locations', uselist=True,
                                     cascade="all, delete", passive_deletes=False)
 
+    def __init__(self,data:dict):
+        self.name = data['name']
+        self.country = data['country']
+        self.about = data['about']
+        self.pic = data['pic']
+        self.slug = slugify(data['name'])
+
     def __repr__(self):
         return '<Locations ({0},{1})>'.format(self.name,self.id)
 
@@ -34,6 +42,16 @@ class Geography(db.Model):
     locations_id =db.Column(db.Integer, db.ForeignKey('locations.id',ondelete='CASCADE')
                                 ,nullable=False,unique=True)
 
+    def __init__(self,data:dict,locations=None):
+
+        if locations:
+            self.lat_long = data['lat_long']
+            self.climate = data['climate']
+            self.landscape = data['landscape']
+            self.locations = locations
+        else:
+            raise Exception('<{0} missing fk for field locations>'.format(self.__class__))
+
     def __repr__(self):
         return '<Geography ({0},{1},{2})>'.format(self.landscape,self.locations.name,self.id)
 
@@ -44,9 +62,20 @@ class Stats(db.Model):
     rank = db.Column(db.Integer, nullable=True)
     stars = db.Column(db.Integer, nullable=True)
     yearly_visitors = db.Column(db.Integer, nullable=True)
-    unesco_heritage = db.Column(db.Boolean)
+    unesco_heritage = db.Column(db.Boolean, default=False)
     locations_id =db.Column(db.Integer, db.ForeignKey('locations.id',ondelete='CASCADE')
                                         ,unique=True,nullable=False)
+
+    def __init__(self,data:dict,locations=None):
+
+        if locations:
+            self.stars = 1 if data['stars'] else 0
+            self.rank = int(data['rank'])
+            self.unesco_heritage = bool(data['unesco_heritage'])
+            self.yearly_visitors = int(data['yearly_visitors'])
+            self.locations = locations
+        else:
+            raise Exception('<{0} missing fk for field locations>'.format(self.__class__))
 
     def __repr__(self):
         return '<Stats ({0},{1},{2})>'.format(self.yearly_visitors,self.locations.name,self.id)
@@ -59,6 +88,14 @@ class Species(db.Model):
     image = db.Column(db.String(50), nullable=True)
     locations_id =db.Column(db.Integer, db.ForeignKey('locations.id',ondelete='CASCADE')
                                 ,nullable=False)
+    def __init__(self,data:dict,locations=None):
+
+        if locations:
+            self.species_name = data['species_name']
+            self.image = data['image']
+            self.locations = locations
+        else:
+            raise Exception('<{0} missing fk for field locations>'.format(self.__class__))
 
     def __repr__(self):
         return '<Species ({0},{1},{2})>'.format(self.species_name,self.locations.name,self.locations_id)
