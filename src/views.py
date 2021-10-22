@@ -1,13 +1,17 @@
 from flask.views import MethodView
 from .models import *
 from .serializer import *
-from .models import *
+from flask import request
+from .helpers import post_data
+
 
 
 class IndexAPI(MethodView):
 
     def get(self):
-        return {'Natural Wonders':'http://api.naturalwonders.com/'}
+        return {'Natural Wonders':'http://api.naturalwonders.com/',
+                'locations':'http://api.naturalwonders.com/locations/',
+                }
 
 
 class LocationsAPI(MethodView):
@@ -19,5 +23,8 @@ class LocationsAPI(MethodView):
                     total=len(locations))
         return data
 
-    def post(self,**kwargs):
-        pass
+    def post(self,*args,**kwargs):
+        if post_data(request.get_json()):
+            return {'status' :'new resource has been created'}
+        else:
+            return {'status':'fields or data you entered is incorrect'}

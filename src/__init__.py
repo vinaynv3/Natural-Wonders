@@ -6,8 +6,8 @@ from flask import Flask
 def create_app(test_config=None):
 
     """
-    function creates app, then loads configurations
-    details from instance path
+    function creates flask app instance,loads configurations
+    details from instance path from file config.py
     """
     app = Flask(__name__, instance_relative_config=True)
     if test_config is None:

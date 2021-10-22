@@ -22,6 +22,7 @@ class Locations(db.Model):
     species = db.relationship('Species', backref='locations', uselist=True,
                                     cascade="all, delete", passive_deletes=False)
 
+    #constructor
     def __init__(self,data:dict):
         self.name = data['name']
         self.country = data['country']
@@ -42,8 +43,8 @@ class Geography(db.Model):
     locations_id =db.Column(db.Integer, db.ForeignKey('locations.id',ondelete='CASCADE')
                                 ,nullable=False,unique=True)
 
+    #constructor
     def __init__(self,data:dict,locations=None):
-
         if locations:
             self.lat_long = data['lat_long']
             self.climate = data['climate']
@@ -66,8 +67,8 @@ class Stats(db.Model):
     locations_id =db.Column(db.Integer, db.ForeignKey('locations.id',ondelete='CASCADE')
                                         ,unique=True,nullable=False)
 
+    #constructor
     def __init__(self,data:dict,locations=None):
-
         if locations:
             self.stars = 1 if data['stars'] else 0
             self.rank = int(data['rank'])
@@ -88,8 +89,9 @@ class Species(db.Model):
     image = db.Column(db.String(50), nullable=True)
     locations_id =db.Column(db.Integer, db.ForeignKey('locations.id',ondelete='CASCADE')
                                 ,nullable=False)
-    def __init__(self,data:dict,locations=None):
 
+    #constructor
+    def __init__(self,data:dict,locations=None):
         if locations:
             self.species_name = data['species_name']
             self.image = data['image']

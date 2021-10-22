@@ -4,19 +4,22 @@ from flask import current_app, g
 from flask.cli import with_appcontext
 from flask_sqlalchemy import SQLAlchemy
 
+# SQLAlchemy database instance
 db = SQLAlchemy()
 
+"""
+Below funcs are app context managers,
+responsible for storing application level data, cli commands
+"""
 def get_db():
     if 'db' not in g:
         g.db = db
     return g.db
 
-
 def close_db(e=None):
     db = g.pop('db', None)
     if db is not None:
         db.session.close()
-
 
 @click.command('drop_db')
 @with_appcontext
@@ -26,7 +29,6 @@ def destruct_db_command():
     get_db().drop_all()
     click.echo('Database Dropped')
 
-
 @click.command('init_db')
 @with_appcontext
 def init_db_command():
@@ -35,7 +37,6 @@ def init_db_command():
     get_db().init_app(current_app)
     get_db().create_all()
     click.echo('Database Initialized')
-
 
 def init_db(app):
     app.teardown_appcontext(close_db)
