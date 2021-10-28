@@ -9,12 +9,13 @@ class Locations(db.Model):
     name = db.Column(db.String(50),unique=True,nullable=False)
     country = db.Column(db.String(50), nullable=False)
     about = db.Column(db.Text, nullable=False)
-    pic = db.Column(db.String(50), nullable=False)
     slug = db.Column(db.String(50), nullable=False)
-    datetime = db.Column(db.DateTime, nullable=True,
+    created_at = db.Column(db.DateTime, nullable=True,
                               default=datetime.utcnow)
 
-    # Database table relationships: one-to-one ('Geography','Stats'), one-to-many('Species)
+    # Database table relationships: one-to-one ('Geography','Stats','LocationImage'), one-to-many('Species)
+    picture = db.relationship('LocationImage', backref='locations',uselist=False,
+                                        cascade="all, delete", passive_deletes=False)
     geography = db.relationship('Geography', backref='locations',uselist=False,
                                     cascade="all, delete", passive_deletes=False)
     stats = db.relationship('Stats', backref='locations', uselist=False,
@@ -27,11 +28,29 @@ class Locations(db.Model):
         self.name = data['name']
         self.country = data['country']
         self.about = data['about']
-        self.pic = data['pic']
         self.slug = slugify(data['name'])
 
     def __repr__(self):
         return '<Locations ({0},{1})>'.format(self.name,self.id)
+
+#Location picture
+class LocationImage(db.Model):
+    id = db.Column(db.Integer, unique=True, primary_key=True)
+    picture = db.Column(db.String(50), nullable=False)
+    locations_id =db.Column(db.Integer, db.ForeignKey('locations.id',ondelete='CASCADE')
+                                ,nullable=False,unique=True)
+
+    #constructor
+    def __init__(self,data:dict,locations=None):
+        if locations:
+            self.picture = data['file_name']
+            self.locations = locations
+        else:
+            raise Exception('<{0} missing fk for field locations>'.format(self.__class__))
+
+    def __repr__(self):
+        return '<Species ({0},{1},{2})>'.format(self.species_name,self.locations.name,self.locations_id)
+
 
 
 # Geography table: Stores landscape geographical position and its characters
@@ -71,7 +90,7 @@ class Stats(db.Model):
     def __init__(self,data:dict,locations=None):
         if locations:
             self.stars = 1 if data['stars'] else 0
-            self.rank = int(data['rank'])
+            self.rank = Locations.query.count()
             self.unesco_heritage = bool(data['unesco_heritage'])
             self.yearly_visitors = int(data['yearly_visitors'])
             self.locations = locations
@@ -86,7 +105,6 @@ class Stats(db.Model):
 class Species(db.Model):
     id = db.Column(db.Integer, unique=True, primary_key=True)
     species_name = db.Column(db.String(50), nullable=False)
-    image = db.Column(db.String(50), nullable=True)
     locations_id =db.Column(db.Integer, db.ForeignKey('locations.id',ondelete='CASCADE')
                                 ,nullable=False)
 
@@ -94,7 +112,6 @@ class Species(db.Model):
     def __init__(self,data:dict,locations=None):
         if locations:
             self.species_name = data['species_name']
-            self.image = data['image']
             self.locations = locations
         else:
             raise Exception('<{0} missing fk for field locations>'.format(self.__class__))

@@ -14,6 +14,12 @@ def init_marshmallow(app):
     with app.app_context():
         ma.init_app(current_app)
 
+#serializes LocationImage model data
+class LocationImageSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = LocationImage
+    picture = ma.auto_field()
+
 # serializes geography model data
 class GeographySchema(ma.SQLAlchemySchema):
     class Meta:
@@ -36,7 +42,18 @@ class SpeciesSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Species
     species_name = ma.auto_field()
-    image = ma.auto_field()
+
+# serializes Location model data
+class LocationSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Locations
+        ordered = True
+    id = ma.auto_field()
+    name = ma.auto_field()
+    about = ma.auto_field()
+    country = ma.auto_field()
+    slug = ma.auto_field()
+
 
 # serializes Locations model data
 class LocationsSchema(ma.SQLAlchemySchema):
@@ -46,10 +63,9 @@ class LocationsSchema(ma.SQLAlchemySchema):
     id = ma.auto_field()
     name = ma.auto_field()
     about = ma.auto_field()
-    pic = ma.auto_field()
     country = ma.auto_field()
     slug = ma.auto_field()
-    datetime = ma.auto_field()
+    picture = ma.Nested(LocationImageSchema)
     geography = ma.Nested(GeographySchema)
     stats = ma.Nested(StatsSchema)
     species = ma.Nested(SpeciesSchema,many=True)
