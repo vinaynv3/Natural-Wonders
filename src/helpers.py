@@ -1,6 +1,8 @@
 from .models import *
 from .database import db
+from flask import current_app
 from slugify import slugify
+import os
 
 
 # database session handler
@@ -95,8 +97,14 @@ class DeleteLocationData(PutLocationData):
 
     def location_model_delete(self):
         location = Locations.query.filter_by(slug=self.name_slug).first_or_404()
+        filename = location.picture
+        folder = current_app.config['UPLOAD_FOLDER']
+        for filename.picture in os.listdir(folder):
+            file_path = os.path.join(folder, filename.picture)
+            os.remove(file_path)
         database_session(location,delete=True)
-        return {'status' :'resource deleted'}
+        return {'status' :'{0} resource deleted'.format(self.name_slug)}
+
 
 
 # request data management factory for endpoints for url /locations/ and after

@@ -1,6 +1,8 @@
 from datetime import datetime
 from .database import db
 from slugify import slugify
+from bisect import bisect
+
 
 
 # Locations table: Stores landscape details
@@ -14,7 +16,7 @@ class Locations(db.Model):
                               default=datetime.utcnow)
 
     # Database table relationships: one-to-one ('Geography','Stats','LocationImage'), one-to-many('Species)
-    picture = db.relationship('LocationImage', backref='locations',uselist=False,
+    picture = db.relationship('LocationImage', backref='locations',uselist=False, lazy=True,
                                         cascade="all, delete", passive_deletes=False)
     geography = db.relationship('Geography', backref='locations',uselist=False,
                                     cascade="all, delete", passive_deletes=False)
@@ -41,16 +43,15 @@ class LocationImage(db.Model):
                                 ,nullable=False,unique=True)
 
     #constructor
-    def __init__(self,data:dict,locations=None):
+    def __init__(self,file_name:str,locations=None):
         if locations:
-            self.picture = data['file_name']
+            self.picture = file_name
             self.locations = locations
         else:
             raise Exception('<{0} missing fk for field locations>'.format(self.__class__))
 
     def __repr__(self):
-        return '<Species ({0},{1},{2})>'.format(self.species_name,self.locations.name,self.locations_id)
-
+        return '<Species ({0},{1},{2})>'.format(self.picture,self.locations.name,self.locations_id)
 
 
 # Geography table: Stores landscape geographical position and its characters
@@ -86,13 +87,26 @@ class Stats(db.Model):
     locations_id =db.Column(db.Integer, db.ForeignKey('locations.id',ondelete='CASCADE')
                                         ,unique=True,nullable=False)
 
+    def rank_setter(self,yearly_visitors):
+        all_visitor_list = [stat for stat in self.query.all()]
+        self_rank = bisect([item.yearly_visitors for item in all_visitor_list],yearly_visitors) + 1
+        if self_rank > 1:
+            position = self_rank-1
+            while position < len(all_visitor_list):
+                all_visitor_list[position].rank = all_visitor_list[position].rank+1
+                db.session.add(all_visitor_list[position])
+                db.session.commit()
+                db.session.close()
+                position +=1
+        return self_rank
+
     #constructor
     def __init__(self,data:dict,locations=None):
         if locations:
-            self.stars = 1 if data['stars'] else 0
-            self.rank = Locations.query.count()
-            self.unesco_heritage = bool(data['unesco_heritage'])
             self.yearly_visitors = int(data['yearly_visitors'])
+            self.stars = 1 if int(data['stars'])>0 else 0
+            self.rank = self.rank_setter(self.yearly_visitors)
+            self.unesco_heritage = bool(data['unesco_heritage'])
             self.locations = locations
         else:
             raise Exception('<{0} missing fk for field locations>'.format(self.__class__))
