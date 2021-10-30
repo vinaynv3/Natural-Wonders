@@ -2,6 +2,7 @@ from flask_marshmallow import Marshmallow
 from flask import current_app
 from .models import *
 
+
 """
 ma : Marshmallow,
 object serialization/deserialization schema
@@ -14,11 +15,13 @@ def init_marshmallow(app):
     with app.app_context():
         ma.init_app(current_app)
 
+
 #serializes LocationImage model data
 class LocationImageSchema(ma.SQLAlchemySchema):
     class Meta:
         model = LocationImage
     picture = ma.auto_field()
+
 
 # serializes geography model data
 class GeographySchema(ma.SQLAlchemySchema):
@@ -28,20 +31,25 @@ class GeographySchema(ma.SQLAlchemySchema):
     climate = ma.auto_field()
     landscape = ma.auto_field()
 
+
 # serializes Stats model data
 class StatsSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Stats
-    rank = ma.auto_field()
+    above_sealevel = ma.auto_field()
     stars = ma.auto_field()
     yearly_visitors = ma.auto_field()
     unesco_heritage = ma.auto_field()
+
 
 # serializes Species model data
 class SpeciesSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Species
     species_name = ma.auto_field()
+    species_pic = ma.auto_field()
+    endangered = ma.auto_field()
+
 
 # serializes Location model data
 class LocationSchema(ma.SQLAlchemySchema):

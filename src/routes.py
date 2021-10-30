@@ -14,8 +14,9 @@ def app_routes(app):
     with app.app_context():
         register_api(IndexAPI, 'index', '/',['GET'])
         register_api(LocationsAPI, 'locations', '/locations/',['GET','POST'])
-        register_api(LocationAPI, 'location', '/locations/<name>/',['GET','POST','PUT','DELETE'])
-        register_api(LocationImageAPI, 'location_picture', '/locations/image/<name>/',['GET','POST','PUT','DELETE'])
+        register_api(LocationAPI, 'location', '/locations/<name>/',['GET','PUT','DELETE'])
+        register_api(LocationImageAPI, 'location_picture', '/locations/<name>/pic/',['GET','POST','PUT','DELETE'])
+        register_api(LocationGeoAPI, 'location_geography', '/locations/<name>/geo/',['GET','POST','PUT','DELETE'])
 
         #error handlers
         @app.errorhandler(404)
