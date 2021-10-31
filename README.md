@@ -3,7 +3,6 @@ REST API contains detailed information about some of the beautiful and breathtak
 
 ![image](https://github.com/vinaynv3/Natural-Wonders/blob/master/src/static/naturalwonders.jpg)
 
-## About Project
 
 ## Table of Contents
 1. [General Info](#overview)
@@ -14,8 +13,7 @@ REST API contains detailed information about some of the beautiful and breathtak
 ### General Info
 ***
 Write down general information about your project. It is a good idea to always put a project status in the readme file. This is where you can add it. 
-### Screenshot
-![Image text](https://www.united-internet.de/fileadmin/user_upload/Brands/Downloads/Logo_IONOS_by.jpg)
+
 ## Technologies
 ***
 A list of technologies used within the project:
