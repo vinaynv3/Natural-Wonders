@@ -1,24 +1,22 @@
 
 import os
+import json
 from flask.views import MethodView
+from flask import request, current_app,redirect, url_for
 from .models import *
-from .serializer import *
-from flask import request, current_app, send_from_directory,redirect, url_for
-from .helpers import database_session
 from .interface import request_data_handler
-from werkzeug.utils import secure_filename
+
 
 
 #view<endpoint:/>
 class IndexAPI(MethodView):
 
-    urls = {'natural_wonders':'http://api.naturalwonders.com/',
-            'locations':'http://api.naturalwonders.com/locations/',
-            'location_name':'http://api.naturalwonders.com/locations/<name>/',
-            'location_images':'http://api.naturalwonders.com/locations/image/<name>/',
-            }
     def get(self):
-        return self.urls
+        path = os.path.abspath(os.path.dirname(__file__))
+        os.chdir(path)
+        with open("index.json","r") as file:
+            data = json.load(file)
+            return data
 
 #view<endpoint:/location/>
 class LocationsAPI(MethodView):
@@ -32,7 +30,7 @@ class LocationsAPI(MethodView):
         if status:
             return redirect(url_for('locations',_method='GET'))
         else:
-            return {'status':'incorrect data format, post list of location dict object or objects'}
+            return {'status':'incorrect data format, post location dict object or objects in a list'}
 
 
 #view<endpoint:/location/<name>/>
@@ -72,80 +70,90 @@ class LocationGeoAPI(MethodView):
             return request_data_handler(request,self.__name,placeholder=name)
 
 
+#view<endpoint:/location/<name>/stats/>
+class LocationStatsAPI(MethodView):
 
-class LocationImageAPI(MethodView):
-
-    """
-             **********LocationImageAPI: location image management tool**********
-    class is designed to handle only one image per location, http methods below outlines the
-    implementation and images are found under folder app/media/
-    GET: image can be accessed only if image already present in database
-    POST: creates new image record in model LocationImage relative to endpoint /locations/<name>/
-    PUT: updates image record in model LocationImage relative to endpoint /locations/<name>/
-    DELETE: deletes image record in model LocationImage & upload folder relative to endpoint /locations/<name>/
-    """
-    def location_attr(self,name):
-        location = Locations.query.filter_by(slug=name).first_or_404()
-        return location
-
+    __name = 'LocationStatsAPI'
     def get(self,name):
-        loc_image = LocationImage.query.filter_by(locations=self.location_attr(name)).first_or_404()
-        if loc_image:
-            return send_from_directory(current_app.config["UPLOAD_FOLDER"], loc_image.picture)
+        if Locations.query.filter_by(slug=name).first_or_404():
+            return request_data_handler(request,self.__name,placeholder=name)
 
-
-    def allowed_file(self,filename):
-        return '.' in filename and \
-                   filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
-
-    def remove_file(self,filename):
-        folder = current_app.config['UPLOAD_FOLDER']
-        for filename.picture in os.listdir(folder):
-            file_path = os.path.join(folder, filename.picture)
-            try:
-                os.remove(file_path)
-                database_session(filename,delete=True)
-                return True
-            except Exception as e:
-                return False
-
-    def post(self,name):
-
-        f = list(request.files.keys())[0]
-        file = request.files[f]
-        if f not in request.files or file.filename == '':
-            return {'status':'missing file in content type header for record {0}'.format(name)}
-
-        elif file and self.allowed_file(file.filename) and not self.location_attr(name).picture:
-            filename = secure_filename(file.filename)
-            database_session(LocationImage(filename,locations=self.location_attr(name)))
-            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('location_picture', name=name,_method='GET'))
-        else:
-            return {'status':'{0} file already created for record {1}'.format(file,name)}
+    def post(self, name):
+        if Locations.query.filter_by(slug=name).first_or_404():
+            return request_data_handler(request,self.__name,placeholder=name)
 
     def put(self, name):
-        f = list(request.files.keys())[0]
-        file = request.files[f]
-        if f not in request.files or file.filename == '':
-            return {'status':'missing file in content type header for record {0}'.format(name)}
-        elif file and self.allowed_file(file.filename) and self.location_attr(name).picture:
-            picture_model = LocationImage.query.filter_by(locations=self.location_attr(name)).first_or_404()
-            status = self.remove_file(picture_model)
-            filename = secure_filename(file.filename)
-            database_session(LocationImage(filename,locations=self.location_attr(name)))
-            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('location_picture', name=name,_method='GET'))
-        else:
-            return {'status':'{0} file doesnt exist for record {1} to update'.format(file,name)}
+        if Locations.query.filter_by(slug=name).first_or_404():
+            return request_data_handler(request,self.__name,placeholder=name)
 
     def delete(self,name):
+        if Locations.query.filter_by(slug=name).first_or_404():
+            return request_data_handler(request,self.__name,placeholder=name)
 
-        if self.location_attr(name).picture:
-            filename = LocationImage.query.filter_by(locations=self.location_attr(name)).first_or_404()
-            if self.remove_file(filename):
-                return {'status':'{0} deleted for record {1}'.format(filename.picture,name)}
-        else:
-            f = list(request.files.keys())[0]
-            file = request.files[f]
-            return {'status':'{0} file doesnt exist for record {1} to delete'.format(file,name)}
+
+#view<endpoint:/location/<name>/pic/>
+class LocationPicAPI(MethodView):
+
+    __name = 'LocationPicAPI'
+    def get(self,name):
+        if Locations.query.filter_by(slug=name).first_or_404():
+            return request_data_handler(request,self.__name,placeholder=name)
+
+    def post(self, name):
+        if Locations.query.filter_by(slug=name).first_or_404():
+            return request_data_handler(request,self.__name,placeholder=name)
+
+    def put(self, name):
+        if Locations.query.filter_by(slug=name).first_or_404():
+            return request_data_handler(request,self.__name,placeholder=name)
+
+    def delete(self,name):
+        if Locations.query.filter_by(slug=name).first_or_404():
+            return request_data_handler(request,self.__name,placeholder=name)
+
+#view<endpoint:/location/<name>/pic/pic.jpg>
+class PicDownloadAPI(MethodView):
+
+    __name = 'PicDownloadAPI'
+    def get(self,name,filename):
+        location = Locations.query.filter_by(slug=name).first_or_404()
+        if location and location.picture :
+            return request_data_handler(request,self.__name,placeholder=name,\
+                                        pic=filename)
+
+
+#view<endpoint:/location/<name>/species/>
+class LocationSpeciesAPI(MethodView):
+
+    __name = 'LocationSpeciesAPI'
+    def get(self,name):
+        if Locations.query.filter_by(slug=name).first_or_404():
+            return request_data_handler(request,self.__name,placeholder=name)
+
+    def post(self, name):
+        if Locations.query.filter_by(slug=name).first_or_404():
+            return request_data_handler(request,self.__name,placeholder=name)
+
+    def delete(self,name):
+        if Locations.query.filter_by(slug=name).first_or_404():
+            return request_data_handler(request,self.__name,placeholder=name)
+
+
+#view<endpoint:/location/<name>/species/<specie_name>/
+class LocationSpecieAPI(MethodView):
+
+    __name = 'LocationSpecieAPI'
+    def get(self,name,specie_name):
+        if Locations.query.filter_by(slug=name).first_or_404():
+            return request_data_handler(request,self.__name,\
+                                placeholder=name,specie=specie_name)
+
+    def put(self, name,specie_name):
+        if Locations.query.filter_by(slug=name).first_or_404():
+            return request_data_handler(request,self.__name,\
+                                placeholder=name,specie=specie_name)
+
+    def delete(self,name,specie_name):
+        if Locations.query.filter_by(slug=name).first_or_404():
+            return request_data_handler(request,self.__name,\
+                                    placeholder=name,specie=specie_name)

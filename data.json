@@ -1,0 +1,81 @@
+[
+    {
+        "name": "Niagara Falls",
+        "about": "Niagara Falls, a spectacular waterfall in the NIAGARA RIVER, is the world's greatest waterfall by volume at 2832 m3. It is split in two by Goat Island. The American Falls are 59 m high (21-34 m to rock debris at the base of the falls) and 260 m wide and carry about 10% of the flow.",
+        "country": "Ontario, Canada",
+        "geography": {
+            "lat_long": "43.0896° N, 79.0849° W",
+            "landscape": "water falls",
+            "climate": "temperate"
+        },
+        "stats": {
+            "stars": 1,
+            "above_sealevel": 99,
+            "yearly_visitors": 8120000,
+            "unesco_heritage": true
+        },
+        "species": [
+            {
+
+                "endangered": true,
+                "species_name": "wolf",
+                "sp_class":"mammal"
+            },
+            {
+                "endangered": false,
+                "species_name": "beaver",
+                "sp_class":"mammal"
+            },
+               {
+                "endangered": false,
+                "species_name": "blue jay",
+                "sp_class":"bird"
+            },
+               {
+                "endangered": false,
+                "species_name": "butter nut",
+                "sp_class":"tree"
+            }
+        ]
+    },
+  
+      {
+        "name": "amazon rainforest",
+        "about": "There is no place on earth quite like it, also known as lungs of the earth. Amazon Rainforest, large tropical rainforest occupying the drainage basin of the Amazon River and its tributaries in northern South America and covering an area of 2,300,000 square miles (6,000,000 square km). Comprising about 40 percent of Brazil’s total area, it is bounded by the Guiana Highlands to the north, the Andes Mountains to the west, the Brazilian central plateau to the south, and the Atlantic Ocean to the east. Amazonia is the largest river basin in the world, and its forest stretches from the Atlantic Ocean in the east to the tree line of the Andes in the west. The forest widens from a 200-mile (320-km) front along the Atlantic to a belt 1,200 miles (1,900 km) wide where the lowlands meet the Andean foothills. The immense extent and great continuity of this rainforest is a reflection of the high rainfall, high humidity, and monotonously high temperatures that prevail in the region",
+        "country": "south america (brazil,peru,columbia)",
+        "geography": {
+            "lat_long": "3.4653° S, 62.2159° W",
+            "landscape": "forest",
+            "climate": "tropical"
+        },
+        "stats": {
+            "stars": 1,
+            "above_sealevel": 105,
+            "yearly_visitors": 10000,
+            "unesco_heritage": true
+        },
+        "species": [
+            {
+
+                "endangered": true,
+                "species_name": "jaguar",
+                "sp_class":"mammal"
+            },
+            {
+                "endangered": false,
+                "species_name": "anaconda",
+                "sp_class":"reptile"
+            },
+               {
+                "endangered": false,
+                "species_name": "parrots",
+                "sp_class":"bird"
+            },
+               {
+                "endangered": false,
+                "species_name": "myrtle",
+                "sp_class":"tree"
+            }
+        ]
+    }
+  ]

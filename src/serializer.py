@@ -46,9 +46,12 @@ class StatsSchema(ma.SQLAlchemySchema):
 class SpeciesSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Species
+        ordered = True
     species_name = ma.auto_field()
-    species_pic = ma.auto_field()
+    pic = ma.auto_field()
     endangered = ma.auto_field()
+    sp_slug = ma.auto_field()
+    sp_class = ma.auto_field()
 
 
 # serializes Location model data

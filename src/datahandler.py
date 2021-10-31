@@ -18,11 +18,12 @@ class LocationList:
     """
 
     def __init__(self, data:list=None,
-                 placeholder:str=None,picture:str=None):
+                 placeholder:str=None,picture:str=None,specie:str=None):
         self.method = data.method
         self.slug = placeholder
         self.data = data.get_json()
 
+    #GET<endpoint:/locations/>
     def get_list(self):
         locations = Locations.query.all()
         schema = LocationsSchema(many=True)
@@ -36,6 +37,7 @@ class LocationList:
         location = Locations.query.filter_by(name=location_name).first()
         return location
 
+    # initialize location species details into model Species
     def species(self,item):
         data = item.get('species',0)
         location = self.location_primary_key(item)
@@ -44,6 +46,7 @@ class LocationList:
                 if isinstance(d,dict) and 'species_name' in d.keys():
                     database_session(Species(d,locations=location),insert=True)
 
+    # initialize location stats details into model Stats
     def stats(self,item):
         if item.get('stats',0):
             stats_obj = Stats(item.get('stats',0),locations=self.location_primary_key(item))
@@ -90,14 +93,14 @@ class LocationList:
 
 
 class LocationName:
-    def __init__(self,data,placeholder:str=None,picture:str=None):
+    def __init__(self,data,placeholder:str=None,picture:str=None,specie:str=None):
         self.data = data.get_json()
         self.slug = placeholder
         self.picture = picture
         self.method = data.method
 
     def location_name(self):
-        location = Locations.query.filter_by(slug=self.slug).first_or_404()
+        location = Locations.query.filter_by(slug=self.slug).first()
         return location
 
     def get(self):
@@ -136,15 +139,14 @@ class LocationName:
         return False
 
 
-
 class LocationGeo(LocationName):
 
-    def __init__(self,data,placeholder:str=None,picture:str=None):
-        super().__init__(data,placeholder,picture)
+    def __init__(self,data,placeholder:str=None,picture:str=None,specie:str=None):
+        super().__init__(data,placeholder,picture,specie)
         self.geography_fields = ('lat_long','climate','landscape')
 
     def geography_name(self):
-        geography = Geography.query.filter_by(locations=self.location_name()).first_or_404()
+        geography = Geography.query.filter_by(locations=self.location_name()).first()
         return geography
 
     def validate_data(self):
@@ -176,6 +178,71 @@ class LocationGeo(LocationName):
         geography = self.geography_name()
         database_session(geography,delete=True)
         return {'status' :'{0} resource geography details deleted'.format(self.slug)}
+
+    def process_request(self):
+        if self.method == 'GET':
+            return self.get()
+        elif self.method == 'POST':
+            return self.post()
+        elif self.method == 'PUT':
+            return self.update()
+        elif self.method == 'DELETE':
+            return self.delete()
+        return False
+
+
+class LocationStats(LocationName):
+
+    def __init__(self,data,placeholder:str=None,picture:str=None,specie:str=None):
+        super().__init__(data,placeholder,picture,specie)
+        self.stats_fields = ('above_sealevel','stars','yearly_visitors','unesco_heritage')
+
+    def stats_name(self):
+        stats = Stats.query.filter_by(locations=self.location_name()).first()
+        return stats
+
+    def validate_data(self):
+        validated = any(True for field in self.stats_fields if field in self.data.keys())
+        return validated
+
+    def get(self):
+        stats_schema = StatsSchema()
+        return stats_schema.dump(self.stats_name())
+
+    def post(self):
+        if isinstance(self.data,dict) and self.validate_data():
+            location = self.location_name()
+            stats = Stats(self.data,locations=location)
+            database_session(stats,insert=True)
+        return {'status' :'{0} stats details added'.format(self.slug)}
+
+    def validate_keys(self,key,val,stats):
+        if key in ('yearly_visitors','above_sealevel'):
+            return int(val) if int(val) > 0 else getattr(stats,key)
+        elif key in ('unesco_heritage') and val in (True,False):
+            return val
+        elif key in ('stars') and int(val) in (0,1):
+            previous_data = getattr(stats,key)
+            return previous_data+1 if int(val) == 1 else previous_data-1
+        else:
+            return
+
+    def update(self):
+        stats = self.stats_name()
+        if self.validate_data():
+            keys = [field for field in self.stats_fields if field in self.data.keys()]
+            for key in keys:
+                value = self.validate_keys(key,self.data[key],stats)
+
+                if value or key in self.stats_fields:
+                    setattr(stats,key,value)
+        database_session(stats,insert=True)
+        return {'status' :'{0} resource stats details updated'.format(self.slug)}
+
+    def delete(self):
+        stats = self.stats_name()
+        database_session(stats,delete=True)
+        return {'status' :'{0} resource stats details deleted'.format(self.slug)}
 
     def process_request(self):
         if self.method == 'GET':

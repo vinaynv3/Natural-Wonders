@@ -130,9 +130,11 @@ class Stats(db.Model):
 # Species table: Stores landscape biological & botanical information
 class Species(db.Model):
     id = db.Column(db.Integer, unique=True, primary_key=True)
-    species_name = db.Column(db.String(50), nullable=False)
-    species_pic = db.Column(db.String(50), nullable=True)
+    species_name = db.Column(db.String(30), nullable=False)
+    pic = db.Column(db.String(50), nullable=True)
     endangered = db.Column(db.Boolean,nullable=True, default=False)
+    sp_slug = db.Column(db.String(30), nullable=False)
+    sp_class = db.Column(db.String(30), nullable=True)
     locations_id =db.Column(db.Integer, db.ForeignKey('locations.id',ondelete='CASCADE')
                                 ,nullable=False)
 
@@ -141,7 +143,9 @@ class Species(db.Model):
         if locations:
             try:
                 self.species_name = data.get('species_name',' ')
-                self.endangered = bool(data.get('endangered',0)) 
+                self.endangered = bool(data.get('endangered',0))
+                self.sp_slug = slugify(data.get('species_name',' '))
+                self.sp_class = data.get('sp_class',' ')
                 self.locations = locations
             except ValueError as e:
                 raise ValueError('<{0} {1}>'.format(self.__class__,str(e)))
