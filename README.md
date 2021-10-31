@@ -4,10 +4,10 @@ REST API contains detailed information about some of the beautiful and breathtak
 ![image](https://github.com/vinaynv3/Natural-Wonders/blob/master/naturalwonders1%403!.jpg)
 
 ## Table of Contents
-1. [General Info](#general-info)
+1. [General Info](#overview)
 2. [Technologies](#technologies)
 3. [Installation](#installation)
-4. [Collaboration](#collaboration)
+4. [Collaboration](#instructions)
 5. [FAQs](#faqs)
 ### General Info
 ***
