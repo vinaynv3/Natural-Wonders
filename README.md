@@ -4,6 +4,7 @@ REST API contains detailed information about some of the magnificent, beautiful 
 ![image](https://github.com/vinaynv3/Natural-Wonders/blob/master/src/static/naturalwonders.jpg)
 landscape climate, latitude/longitude, type information is associated with geography, total annual visitors, popularity (stars), altitude above sea level , unesco recognitation status can be found in key stats, finally species live at the location are categorized based on  species name, picture, class, endangered status can be found in keyword species.
 ![image](https://github.com/vinaynv3/Natural-Wonders/blob/master/src/static/species.jpg {width=40px height=400px})
+<img src="./src/static/species.jpg " alt="InfiniteGraph Logo" width="320">
 
 ## Table of Contents
 1. [General Info](#overview)
