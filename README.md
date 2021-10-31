@@ -3,6 +3,8 @@ REST API contains detailed information about some of the beautiful and breathtak
 
 ![image](https://github.com/vinaynv3/Natural-Wonders/blob/master/src/static/naturalwonders.jpg)
 
+##About Project
+
 ## Table of Contents
 1. [General Info](#overview)
 2. [Technologies](#technologies)
