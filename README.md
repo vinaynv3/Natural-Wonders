@@ -1,9 +1,8 @@
 # Natural Wonders
 REST API contains detailed information about some of the beautiful and breathtaking landscapes around the world, each landscape introduces itself with its name, location and description,followed by landscape properties such as geography, statistics and flora fauna living at the location, every landscape has one picture, and several pictures of the species. 
-#### overview
 
 ![image](https://github.com/vinaynv3/Natural-Wonders/blob/master/src/static/naturalwonders.jpg)
-
+* geography
 
 ## Table of Contents
 1. [General Info](#overview)
