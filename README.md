@@ -1,5 +1,5 @@
-# Natural-Wonders
-This RESTfulAPI stores information about some of the beautiful landscapes, natural attractions around the world. 
+# Natural Wonders
+REST API contains detailed information about some of the beautiful and breathtaking landscapes around the world. Each landscape introduces itself with its name, location and description,followed by landscape properties such as geography, statistics and flora fauna living at the location, every landscape has one picture, and several pictures of the species. 
 
 ## Table of Contents
 1. [General Info](#general-info)
