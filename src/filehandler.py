@@ -1,8 +1,10 @@
+import os
 from .helpers import *
 from flask import current_app,redirect, request,redirect, url_for, send_from_directory
 from .datahandler import LocationName
 from .serializer import *
 from werkzeug.utils import secure_filename
+from slugify import slugify
 
 class LocationPic(LocationName):
 
@@ -26,7 +28,12 @@ class LocationPic(LocationName):
 
     def get(self):
         pic_schema = LocationImageSchema()
-        return pic_schema.dump(self.pic_name())
+        pic = self.pic_name()
+        if pic:
+            url = url_for('dwnld_pic',name=self.slug,filename=pic.picture,_method='GET')
+            data = dict(file=pic_schema.dump(pic),_link=url)
+            return data
+        return {}
 
     def post(self):
         model = LocationImage
@@ -41,14 +48,8 @@ class LocationPic(LocationName):
         if self.pic_name():
             delete_file(self.pic_name())
             self.post()
-            return redirect(url_for('dwnld_pic', name=self.slug,
-                                    filename=self.files[f].filename,_method='GET'))
+            return self.get()
 
-    def delete(self):
-        if self.location_name().picture:
-            filename = self.pic_name()
-            if delete_file(filename):
-                return {'status':'{0} deleted for record {1}'.format(filename.picture,self.slug)}
 
     def process_request(self):
         if self.method == 'GET':
@@ -57,10 +58,10 @@ class LocationPic(LocationName):
             return self.post()
         elif self.method == 'PUT':
             return self.put()
-        elif self.method == 'DELETE':
-            return self.delete()
+
         return False
 
+#---------------------------------------------------------------------------------------#
 
 class LocationDwnldPic(LocationName):
 
@@ -73,26 +74,45 @@ class LocationDwnldPic(LocationName):
         return pic
 
     def get(self):
-        return send_from_directory(current_app.config["UPLOAD_FOLDER"], self.filename)
+        folder = current_app.config['UPLOAD_FOLDER']
+        if self.filename in os.listdir(folder):
+            return send_from_directory(folder, self.filename)
+        return {}
+
+    def delete(self):
+        if self.location_name().picture:
+            filename = self.pic_name()
+            if delete_file(filename):
+                return {'status':'{0} deleted for record {1}'.format(filename.picture,self.slug),
+                        'url':url_for('location_picture',name=self.slug,_method='GET')}
 
     def process_request(self):
         if self.method == 'GET':
             return self.get()
+        elif self.method == 'DELETE':
+            return self.delete()
         return False
 
+#----------------------------------------------------------------------------------#
 
 class LocationSpecies(LocationName):
 
     def __init__(self,data,placeholder:str=None,picture:str=None,specie:str=None):
         super().__init__(data,placeholder,picture,specie)
-        self.species_fields = ('species_name','endangered')
+        self.species_fields = ['species_name']
 
     def species_all(self):
         species = Species.query.filter_by(locations=self.location_name()).all()
         return species
 
     def validate_data(self,item):
-        if any(item.get(field,0) for field in self.species_fields):
+        if all(item.get(field,0) for field in self.species_fields):
+            return True
+        return False
+
+    def validate_specie(self,specie):
+        species = self.species_all()
+        if specie in [specie.species_name for specie in species]:
             return True
         return False
 
@@ -103,7 +123,12 @@ class LocationSpecies(LocationName):
 
     def post(self):
         for item in self.data:
-            if isinstance(item,dict) and self.validate_data(item):
+            specie = item.get('species_name',' ')
+            x = isinstance(item,dict)
+            y =  self.validate_data(item)
+            z = self.validate_specie(specie)
+            print(x,y,z)
+            if x and y and not z:
                 location = self.location_name()
                 species = Species(item,locations=location)
                 database_session(species,insert=True)
@@ -125,13 +150,14 @@ class LocationSpecies(LocationName):
             return self.delete()
         return False
 
+#----------------------------------------------------------------------------------#
 
-class LocationSpeciesPics(LocationName):
+class LocationSpecie(LocationName):
     def __init__(self,data,placeholder:str=None,picture:str=None,specie:str=None):
         super().__init__(data,placeholder,picture,specie)
         self.files = data.files
         self.sp_slug = specie
-        self.specie_fields = ('species_name','endangered','pic')
+        self.specie_fields = ('species_name','endangered','pic','sp_class')
 
     def specie_name(self):
         specie = Species.query.filter_by(locations=self.location_name(),sp_slug=self.sp_slug).first()
@@ -139,37 +165,44 @@ class LocationSpeciesPics(LocationName):
 
     def get(self):
         sp_schema = SpeciesSchema()
-        return sp_schema.dump(self.specie_name())
+        specie_serializer = sp_schema.dump(self.specie_name())
+        if self.specie_name().pic:
+            url = url_for('specie_dwnld_pic', name=self.slug, specie_name=self.specie_name().sp_slug,
+                                                file=self.specie_name().pic,_method='GET')
+            return dict(specie=specie_serializer,pic_link=url)
+        return specie_serializer
 
-    def validate_data(self):
-        if any(self.data.get(field,0) for field in self.specie_fields):
-            return True
-        return False
-
-    def pic_handler(self):
+    def file_handler(self):
 
         specie = self.specie_name()
         f = list(self.files.keys())[0]
+        url = url_for('location_specie', name=self.slug,
+                                    specie_name=self.sp_slug,_method='GET')
         if not validate_file(self.files,f):
-            return {'status':'missing file in content type header for record {0}'.format(self.name)}
+            return {'status':'missing file in content type header for record {0}'.format(self.name),
+                    'url':url}
 
         file = self.files.get(f,0)
         filename = secure_filename(file.filename)
         setattr(specie,'pic',filename)
         database_session(specie,insert=True)
         file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-        return redirect(url_for('location_specie', name=self.slug,
-                                    specie_name=self.sp_slug,_method='GET'))
+        return True
 
-    def field_handler(self):
-        specie = self.specie_name()
+    def validate_keys(self):
         keys = [field for field in self.specie_fields if self.data.get(field,0) \
                                                             and field != 'pic']
-        if self.validate_data():
-            for key in keys:
-                if key == 'species_name':
-                    setattr(specie,'sp_slug',slugify(self.data[key]))
-                setattr(specie,key,self.data[key])
+        if 'endangered' not in keys and 'endangered' in self.data.keys():
+            keys.append('endangered')
+        return keys
+
+    def json_handler(self):
+        specie = self.specie_name()
+        keys = self.validate_keys()
+        for key in keys:
+            if key == 'species_name':
+                setattr(specie,'sp_slug',slugify(self.data[key]))
+            setattr(specie,key,self.data[key])
         database_session(specie,insert=True)
         return True
 
@@ -183,19 +216,38 @@ class LocationSpeciesPics(LocationName):
 
     def put(self):
         specie = self.specie_name()
-        print(self.files,self.data)
-        #self.field_handler()
-        if not specie.pic:
-            return self.pic_handler()
-        self.remove_file()
-        return self.pic_handler()
+        if self.data:
+            self.json_handler()
+            keys = self.validate_keys()
+            url = url_for('location_specie',name=self.slug,specie_name=self.sp_slug,_method='GET')
+            if 'species_name' in keys:
+                s = Species.query.filter_by(species_name=self.data['species_name']).first()
+                url = url_for('location_specie',name=self.slug,specie_name=s.sp_slug,_method='GET')
+                return dict(status="Resource updated",url=url)
+            return dict(status="Resource updated",url=url)
+
+        elif not specie.pic:
+            self.file_handler()
+            return self.get()
+        elif self.data and self.files:
+            self.json_handler()
+            self.remove_file()
+            self.file_handler()
+            return dict(status="Resource updated")
+        elif specie.pic:
+            self.remove_file()
+            self.file_handler()
+            return self.get()
+        else:
+            return dict(status="invalid data, please verify")
 
     def delete(self):
         specie = self.specie_name()
         if specie:
             self.remove_file()
             database_session(specie,delete=True)
-            return {'status':'({0}) > {1} record removed {1}'.format(self.slug,self.sp_slug)}
+            return {'status':'({0}) > {1} specie record removed'.format(self.slug,self.sp_slug),
+                    'url':url_for('location_species', name=self.slug,_method='GET')}
 
     def process_request(self):
         if self.method == 'GET':
@@ -203,5 +255,40 @@ class LocationSpeciesPics(LocationName):
         elif self.method == 'PUT':
             return self.put()
         elif self.method == 'DELETE':
+            return self.delete()
+        return False
+
+#---------------------------------------------------------------------------------------#
+
+class LocationSpeciePicDwnld(LocationName):
+
+    def __init__(self,data,placeholder:str=None,picture:str=None,specie:str=None):
+        super().__init__(data,placeholder,picture,specie)
+        self.filename = picture
+        self.specie = specie
+
+
+    def get(self):
+        folder = current_app.config['UPLOAD_FOLDER']
+        if self.filename in os.listdir(folder):
+            return send_from_directory(folder, self.filename)
+        return {}
+
+    def delete(self):
+        specie = Species.query.filter_by(pic=self.filename).first()
+        folder = current_app.config['UPLOAD_FOLDER']
+        url = url_for('location_specie',name=self.slug,specie_name=self.specie,_method='GET')
+        if specie and self.filename in os.listdir(folder):
+            setattr(specie,'pic',None)
+            database_session(specie,insert=True)
+            file_path = os.path.join(folder,self.filename)
+            os.remove(file_path)
+            return {'status':'{0} deleted for record {1}'.format(self.filename,self.specie),
+                    'url':url}
+
+    def process_request(self):
+        if self.method == 'GET':
+            return self.get()
+        if self.method == 'DELETE':
             return self.delete()
         return False

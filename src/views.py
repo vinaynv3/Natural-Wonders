@@ -18,7 +18,7 @@ class IndexAPI(MethodView):
             data = json.load(file)
             return data
 
-#view<endpoint:/location/>
+#view<endpoint:/locations>
 class LocationsAPI(MethodView):
 
     __name = 'LocationsAPI'
@@ -33,7 +33,7 @@ class LocationsAPI(MethodView):
             return {'status':'incorrect data format, post location dict object or objects in a list'}
 
 
-#view<endpoint:/location/<name>/>
+#view<endpoint:/locations/<name>>
 class LocationAPI(MethodView):
 
     __name = 'LocationAPI'
@@ -49,7 +49,7 @@ class LocationAPI(MethodView):
             return request_data_handler(request,self.__name,placeholder=name)
 
 
-#view<endpoint:/location/<name>/geo/>
+#view<endpoint:/location/<name>/geo>
 class LocationGeoAPI(MethodView):
 
     __name = 'LocationGeoAPI'
@@ -70,7 +70,7 @@ class LocationGeoAPI(MethodView):
             return request_data_handler(request,self.__name,placeholder=name)
 
 
-#view<endpoint:/location/<name>/stats/>
+#view<endpoint:/location/<name>/stats>
 class LocationStatsAPI(MethodView):
 
     __name = 'LocationStatsAPI'
@@ -91,7 +91,7 @@ class LocationStatsAPI(MethodView):
             return request_data_handler(request,self.__name,placeholder=name)
 
 
-#view<endpoint:/location/<name>/pic/>
+#view<endpoint:/location/<name>/pic>
 class LocationPicAPI(MethodView):
 
     __name = 'LocationPicAPI'
@@ -107,9 +107,6 @@ class LocationPicAPI(MethodView):
         if Locations.query.filter_by(slug=name).first_or_404():
             return request_data_handler(request,self.__name,placeholder=name)
 
-    def delete(self,name):
-        if Locations.query.filter_by(slug=name).first_or_404():
-            return request_data_handler(request,self.__name,placeholder=name)
 
 #view<endpoint:/location/<name>/pic/pic.jpg>
 class PicDownloadAPI(MethodView):
@@ -117,12 +114,16 @@ class PicDownloadAPI(MethodView):
     __name = 'PicDownloadAPI'
     def get(self,name,filename):
         location = Locations.query.filter_by(slug=name).first_or_404()
-        if location and location.picture :
+        if location or location.picture :
             return request_data_handler(request,self.__name,placeholder=name,\
                                         pic=filename)
 
+    def delete(self,name,filename):
+        if Locations.query.filter_by(slug=name).first_or_404():
+            return request_data_handler(request,self.__name,placeholder=name,\
+                                        pic=filename)
 
-#view<endpoint:/location/<name>/species/>
+#view<endpoint:/location/<name>/species>
 class LocationSpeciesAPI(MethodView):
 
     __name = 'LocationSpeciesAPI'
@@ -139,21 +140,39 @@ class LocationSpeciesAPI(MethodView):
             return request_data_handler(request,self.__name,placeholder=name)
 
 
-#view<endpoint:/location/<name>/species/<specie_name>/
+#view<endpoint:/location/<name>/species/<specie_name>
 class LocationSpecieAPI(MethodView):
 
     __name = 'LocationSpecieAPI'
     def get(self,name,specie_name):
-        if Locations.query.filter_by(slug=name).first_or_404():
+        specie = Species.query.filter_by(species_name=specie_name).first_or_404()
+        if specie:
             return request_data_handler(request,self.__name,\
                                 placeholder=name,specie=specie_name)
 
     def put(self, name,specie_name):
-        if Locations.query.filter_by(slug=name).first_or_404():
+        specie = Species.query.filter_by(species_name=specie_name).first_or_404()
+        if specie:
             return request_data_handler(request,self.__name,\
                                 placeholder=name,specie=specie_name)
 
     def delete(self,name,specie_name):
-        if Locations.query.filter_by(slug=name).first_or_404():
+        specie = Species.query.filter_by(species_name=specie_name).first_or_404()
+        if specie:
             return request_data_handler(request,self.__name,\
                                     placeholder=name,specie=specie_name)
+
+#view<endpoint:/locations/<name>/species/<specie_name>/<file>.jpg>
+class SpeciePicDwnldAPI(MethodView):
+
+    __name = 'SpeciePicDwnldAPI'
+    def get(self,name,specie_name,file):
+        specie = Species.query.filter_by(pic=file).first_or_404()
+        if specie:
+            return request_data_handler(request,self.__name,placeholder=name,\
+                                        specie=specie_name,pic=file)
+    def delete(self,name,specie_name,file):
+        specie = Species.query.filter_by(pic=file).first_or_404()
+        if specie:
+            return request_data_handler(request,self.__name,placeholder=name,\
+                                        specie=specie_name,pic=file)

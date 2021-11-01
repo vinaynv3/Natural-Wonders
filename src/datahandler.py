@@ -1,5 +1,5 @@
 from .models import *
-from flask import current_app
+from flask import current_app, redirect, url_for
 from slugify import slugify
 from .serializer import *
 import os
@@ -91,8 +91,18 @@ class LocationList:
         if self.method.upper():
             return _methods.get(self.method.upper(),_error)
 
+#-------------------------------------------------------------------------------------------------#
 
+#LocationName <endpoint:/locations/<name>
 class LocationName:
+
+    """
+    GET: returns location
+    PUT: updates location details in models
+    DELETE: removes location details in models
+    (Note: POST method is not allowed on endpoint /locations/)
+    """
+
     def __init__(self,data,placeholder:str=None,picture:str=None,specie:str=None):
         self.data = data.get_json()
         self.slug = placeholder
@@ -116,8 +126,15 @@ class LocationName:
                 setattr(location,key,self.data[key])
                 if key == 'name':
                     setattr(location,'slug',slugify(self.data[key]))
-        database_session(location)
-        return {'status' :'{0} resource updated'.format(self.slug)}
+        database_session(location,insert=True)
+
+        name = self.data.get('name',0)
+        if name:
+            return {'status' :'{0} resource updated'.format(name),
+                   "url":url_for('location',name=slugify(name),_method='GET')}
+        return {'status' :'{0} resource updated'.format(self.slug),
+                "url":url_for('location',name=self.slug,_method='GET')}
+
 
     def delete(self):
         location = self.location_name()
@@ -127,7 +144,8 @@ class LocationName:
             file_path = os.path.join(folder, filename.picture)
             os.remove(file_path)
         database_session(location,delete=True)
-        return {'status' :'{0} resource deleted'.format(self.slug)}
+        return {'status' :'{0} resource deleted'.format(self.slug),
+                'url':str(url_for('locations',_method='GET'))}
 
     def process_request(self):
         if self.method == 'GET':
@@ -138,7 +156,9 @@ class LocationName:
             return self.delete()
         return False
 
+#-------------------------------------------------------------------------------------------------#
 
+#LocationGeo<endpoint:/locations/<name>/geo/>
 class LocationGeo(LocationName):
 
     def __init__(self,data,placeholder:str=None,picture:str=None,specie:str=None):
@@ -163,7 +183,8 @@ class LocationGeo(LocationName):
             location = self.location_name()
             geography = Geography(self.data,locations=location)
             database_session(geography,insert=True)
-        return {'status' :'{0} geography details added'.format(self.slug)}
+        return {'status' :'{0} geography details added'.format(self.slug),
+                "url":url_for('location_geography',name=self.slug,_method='GET')}
 
     def update(self):
         geography = self.geography_name()
@@ -172,12 +193,14 @@ class LocationGeo(LocationName):
             for key in keys:
                 setattr(geography,key,str(self.data[key]))
         database_session(geography,insert=True)
-        return {'status' :'{0} resource geography details updated'.format(self.slug)}
+        return {'status' :'{0} resource updated'.format(self.slug),
+                "url":url_for('location_geography',name=self.slug,_method='GET')}
 
     def delete(self):
         geography = self.geography_name()
         database_session(geography,delete=True)
-        return {'status' :'{0} resource geography details deleted'.format(self.slug)}
+        return {'status' :'{0} resource geography details deleted'.format(self.slug),
+                            "url":url_for('location_geography',name=self.slug,_method='GET')}
 
     def process_request(self):
         if self.method == 'GET':
@@ -190,7 +213,9 @@ class LocationGeo(LocationName):
             return self.delete()
         return False
 
+#-------------------------------------------------------------------------------------------------#
 
+#LocationGeo<endpoint:/locations/<name>/stats/>
 class LocationStats(LocationName):
 
     def __init__(self,data,placeholder:str=None,picture:str=None,specie:str=None):
@@ -214,7 +239,8 @@ class LocationStats(LocationName):
             location = self.location_name()
             stats = Stats(self.data,locations=location)
             database_session(stats,insert=True)
-        return {'status' :'{0} stats details added'.format(self.slug)}
+        return {'status' :'{0} stats details added'.format(self.slug),
+                "url":url_for('location_stats',name=self.slug,_method='GET')}
 
     def validate_keys(self,key,val,stats):
         if key in ('yearly_visitors','above_sealevel'):
@@ -237,12 +263,14 @@ class LocationStats(LocationName):
                 if value or key in self.stats_fields:
                     setattr(stats,key,value)
         database_session(stats,insert=True)
-        return {'status' :'{0} resource stats details updated'.format(self.slug)}
+        return {'status' :'{0} resource stats details updated'.format(self.slug),
+                "url":url_for('location_stats',name=self.slug,_method='GET')}
 
     def delete(self):
         stats = self.stats_name()
         database_session(stats,delete=True)
-        return {'status' :'{0} resource stats details deleted'.format(self.slug)}
+        return {'status' :'{0} resource stats details deleted'.format(self.slug),
+                "url":url_for('location_stats',name=self.slug,_method='GET')}
 
     def process_request(self):
         if self.method == 'GET':

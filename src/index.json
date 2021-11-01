@@ -48,13 +48,25 @@
                "index":"http://api.naturalwonders.com/"
             },
             {
-               "index":"http://api.naturalwonders.com/"
+               "landscapes":"http://api.naturalwonders.com/locations"
             },
             {
-               "index":"http://api.naturalwonders.com/"
+               "landscape":"http://api.naturalwonders.com/locations/<name>"
             },
             {
-               "index":"http://api.naturalwonders.com/"
+               "landscape_geography":"http://api.naturalwonders.com/locations/<name>/geo"
+            },
+            {
+              "landscape_stats":"http://api.naturalwonders.com/locations/<name>/stats"
+            },
+            {
+              "landscape_picture":"http://api.naturalwonders.com/locations/<name>/pic"
+            },
+            {
+              "species":"http://api.naturalwonders.com/locations/<name>/species"
+            },
+            {
+              "specie_details":"http://api.naturalwonders.com/locations/<name>/species/<specie_name>"
             }
          ]
       },

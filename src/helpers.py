@@ -1,21 +1,26 @@
+import os
 from .database import db
 from flask import current_app,send_from_directory
 from werkzeug.utils import secure_filename
-import os
+from sqlalchemy.exc import IntegrityError
+
 
 # database session handler
 def database_session(model,insert=False,delete=False):
     try:
-        storage = db.session
+        session = db.session
         if insert:
-            storage.add(model)
+            session.add(model)
+            session.commit()
         elif delete:
-            storage.delete(model)
+            session.delete(model)
+            session.commit()
         else:
             return
+    except IntegrityError:
+        session.rollback()
     finally:
-        storage.commit()
-        storage.close()
+        session.close()
 
 
 # allowed files png', 'jpg', 'jpeg', 'gif'
