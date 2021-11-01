@@ -13,9 +13,9 @@ Landscape climate, latitude/longitude, type information is associated with geogr
 5. [FAQs](#faqs)
 ### API Schema
 ***
-...
+```
 Write down general information about your project. It is a good idea to always put a project status in the readme file. This is where you can add it. 
-...
+```
 ## Technologies
 ***
 A list of technologies used within the project:
