@@ -14,7 +14,33 @@ Landscape climate, latitude/longitude, type information is associated with geogr
 ### API Schema
 ***
 ```
-Write down general information about your project. It is a good idea to always put a project status in the readme file. This is where you can add it. 
+"landscape_details:list": [
+    {
+        "name": "<str:required>",
+        "about": "<str:required>",
+        "country": "<str:required>",
+        "Picture": {
+            "picture": "<img_file>"
+        },
+        "Geography": {
+            "lattitude_longitude": "<str>",
+            "climate": "<str:required>",
+            "landscape": "<str:required>"
+        },
+        "stats": {
+            "yearly_visitors": "<int>",
+            "likes": "<str>",
+            "altitude": "<str>",
+            "unesco_heritage": "<bool>"
+        },
+        "species": {
+            "name": "<str:required>",
+            "endangered": "<bool>",
+            "pic": "<file>",
+            "class": "<str>"
+        }
+    }
+]
 ```
 ## Technologies
 ***
