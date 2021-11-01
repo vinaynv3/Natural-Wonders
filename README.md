@@ -6,12 +6,12 @@ Landscape climate, latitude/longitude, type information is associated with geogr
 <img src="./src/static/species.jpg " alt="InfiniteGraph Logo" width="960" height="330">
 
 ## Table of Contents
-1. [General Info](#overview)
+1. [API Schema](#overview)
 2. [Technologies](#technologies)
 3. [Installation](#installation)
 4. [Collaboration](#instructions)
 5. [FAQs](#faqs)
-### General Info
+### API Schema
 ***
 Write down general information about your project. It is a good idea to always put a project status in the readme file. This is where you can add it. 
 
