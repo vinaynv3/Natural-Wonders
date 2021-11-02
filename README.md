@@ -67,4 +67,4 @@ $ bash dev_server.sh  #starts flask development server
 Side information: To start the application  use ```flask run``` verify app env variable ```export FLASK_APP=<app_name>```
 ## Collaboration
 ***
-I built natural api for educational purpose and with a great admiration for the natural world, if you see any issues,let me know or any feedback would be appreciated.
+I this built natural api for educational purpose, if you see any issues,let me know or any feedback would be appreciated.
