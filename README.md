@@ -15,30 +15,30 @@ Landscape climate, latitude/longitude, type information is associated with geogr
 ***
 For api documentation see link http://vinaynv3.pythonanywhere.com/
 ```
-      "landscape_details_schema:list": [
+      landscape_details_schema:list: [
         {
-          "name": <str:required>,
-          "about": "<str:required>",
-          "country": "<str:required>",
-          "Picture": {
-            "picture": "<img_file>"
+          name: <str:required>,
+          about: <str:required>,
+          country: <str:required>",
+          Picture: {
+            picture: <img_file>
           },
-          "Geography": {
-            "lat_long": "<str>",
-            "climate": "<str:required>",
-            "landscape": "<str:required>"
+          Geography: {
+            lat_long: <str>,
+            climate: <str:required>,
+            landscape": <str:required>
           },
-          "stats": {
-            "yearly_visitors": "<int>",
-            "stars": "<str>",
-            "altitude": "<str>",
-            "unesco_heritage": "<bool>"
+          stats: {
+            yearly_visitors: <int>,
+            stars: <str>,
+            altitude: <str>,
+            unesco_heritage: <bool>
           },
-          "species": {
-            "species_name": "<str:required>",
-            "endangered": "<bool>",
-            "pic": "<file>",
-            "sp_class": "<str>"
+          species: {
+            species_name: <str:required>,
+            endangered: <bool>,
+            pic: <file>,
+            sp_class: <str>
                     }
            }
          ]
