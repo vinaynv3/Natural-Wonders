@@ -14,33 +14,33 @@ Landscape climate, latitude/longitude, type information is associated with geogr
 ### API Schema
 ***
 ```
-"landscape_details:list": [
-    {
-        "name": "<str:required>",
-        "about": "<str:required>",
-        "country": "<str:required>",
-        "Picture": {
+      "landscape_details_schema:list": [
+        {
+          "name": "<str:required>",
+          "about": "<str:required>",
+          "country": "<str:required>",
+          "Picture": {
             "picture": "<img_file>"
-        },
-        "Geography": {
-            "lattitude_longitude": "<str>",
+          },
+          "Geography": {
+            "lat_long": "<str>",
             "climate": "<str:required>",
             "landscape": "<str:required>"
-        },
-        "stats": {
+          },
+          "stats": {
             "yearly_visitors": "<int>",
-            "likes": "<str>",
+            "stars": "<str>",
             "altitude": "<str>",
             "unesco_heritage": "<bool>"
-        },
-        "species": {
-            "name": "<str:required>",
+          },
+          "species": {
+            "species_name": "<str:required>",
             "endangered": "<bool>",
             "pic": "<file>",
-            "class": "<str>"
-        }
-    }
-]
+            "sp_class": "<str>"
+                    }
+           }
+         ]
 ```
 ## Technologies
 ***
