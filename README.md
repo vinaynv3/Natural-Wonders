@@ -17,7 +17,7 @@ For api documentation see link http://vinaynv3.pythonanywhere.com/
 ```
       "landscape_details_schema:list": [
         {
-          "name": "<str:required>",
+          "name": <str:required>,
           "about": "<str:required>",
           "country": "<str:required>",
           "Picture": {
