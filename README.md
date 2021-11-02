@@ -14,6 +14,7 @@ Landscape climate, latitude/longitude, type information is associated with geogr
 ### Docs
 ***
 read api documentation details at  [natural_wonders_docs](http://vinaynv3.pythonanywhere.com/)
+#### API Schema
 ```
       landscape_details_schema:list: [
         {
