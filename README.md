@@ -13,7 +13,7 @@ Landscape climate, latitude/longitude, type information is associated with geogr
 5. [FAQs](#faqs)
 ### Docs
 ***
-For api documentation see link http://vinaynv3.pythonanywhere.com/
+api documentation details at  [natural_wonders_docs](http://vinaynv3.pythonanywhere.com/)
 ```
       landscape_details_schema:list: [
         {
@@ -53,7 +53,7 @@ A list of technologies used within the project:
 
 ## Installation
 ***
-A little intro about the installation. 
+app nstallation steps. 
 ```
 $ git clone https://github.com/vinaynv3/Natural-Wonders.git
 $ cd ../path/to/the/file
