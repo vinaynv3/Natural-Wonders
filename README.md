@@ -13,7 +13,7 @@ Landscape climate, latitude/longitude, type information is associated with geogr
 5. [FAQs](#faqs)
 ### Docs
 ***
-api documentation details at  ![natural_wonders_docs](http://vinaynv3.pythonanywhere.com/)
+read api documentation details at  [natural_wonders_docs](http://vinaynv3.pythonanywhere.com/)
 ```
       landscape_details_schema:list: [
         {
