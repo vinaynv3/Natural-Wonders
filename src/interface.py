@@ -22,3 +22,4 @@ def request_data_handler(request,view_cls_name,delete=False,
         print(cls)
         obj = cls(data=request,placeholder=placeholder,picture=pic,specie=specie)
         return obj.process_request()
+    return {"message":"Ooops! Something went wrong, please verify request url and data"}

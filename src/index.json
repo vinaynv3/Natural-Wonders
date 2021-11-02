@@ -1,84 +1,116 @@
 {
-   "natural_wonders":[
-      {
-         "project":"natural wonders of the world"
-      },
-      {
-         "overview":"rest api contains detailed information about some of the beautiful and breathtaking landscapes around the world. Each landscape introduces itself with its name, location and description,followed by landscape properties such as geography, statistics and flora fauna living at the location, every landscape has one picture, and several pictures of the species"
-      },
-      {
-         "index":[
-            {
-               "landscape_details":[
-                  "name",
-                  "about",
-                  "country"
-               ]
-            },
-            {
-               "picture":"landscape.jpeg"
-            },
-            {
-               "Geography":[
-                  "lattitude_longitude",
-                  "climate",
-                  "landscape"
-               ]
-            },
-            {
-               "stats":[
-                  "yearly_visitors",
-                  "likes",
-                  "altitude",
-                  "unesco_heritage"
-               ]
-            },
-            {
-               "species":[
-                  "name",
-                  "endangered",
-                  "picture"
-               ]
-            }
-         ]
-      },
-      {
-         "endpoints":[
-            {
-               "index":"http://api.naturalwonders.com/"
-            },
-            {
-               "landscapes":"http://api.naturalwonders.com/locations"
-            },
-            {
-               "landscape":"http://api.naturalwonders.com/locations/<name>"
-            },
-            {
-               "landscape_geography":"http://api.naturalwonders.com/locations/<name>/geo"
-            },
-            {
-              "landscape_stats":"http://api.naturalwonders.com/locations/<name>/stats"
-            },
-            {
-              "landscape_picture":"http://api.naturalwonders.com/locations/<name>/pic"
-            },
-            {
-              "species":"http://api.naturalwonders.com/locations/<name>/species"
-            },
-            {
-              "specie_details":"http://api.naturalwonders.com/locations/<name>/species/<specie_name>"
-            }
-         ]
-      },
-      {
-         "conclusion":" I built this rest api for learning and a great admiration,love for natural world, I would appreciate any feedback"
-      },
-      {
-         "contact":{
-            "name":"vinay",
-            "email":"vinaynv987@gmail.com",
-            "github":"https://github.com/vinaynv3"
-         }
+  "natural_wonders_api_docs": [
+    {
+      "project": "natural wonders of the world"
+    },
+    {
+      "overview": "rest api contains detailed information about some of the beautiful and breathtaking landscapes around the world. Each landscape introduces itself with its name, location and description,followed by landscape properties such as geography, statistics and flora fauna living at the location, every landscape has one picture, and several pictures of the species"
+    },
+    {
+      "landscape_details_schema:list": [
+        {
+          "name": "<str:required>",
+          "about": "<str:required>",
+          "country": "<str:required>",
+          "Picture": {
+            "picture": "<img_file>"
+          },
+          "Geography": {
+            "lat_long": "<str>",
+            "climate": "<str:required>",
+            "landscape": "<str:required>"
+          },
+          "stats": {
+            "yearly_visitors": "<int>",
+            "stars": "<str>",
+            "altitude": "<str>",
+            "unesco_heritage": "<bool>"
+          },
+          "species": {
+            "species_name": "<str:required>",
+            "endangered": "<bool>",
+            "pic": "<file>",
+            "sp_class": "<str>"
+          }
+        }
+      ]
+    },
+    {
+      "authentication":"not required"
+    },
+    {
+      "endpoints": [
+        {
+          "index": "http://vinaynv3.pythonanywhere.com/",
+          "_allowed_methods":"GET",
+          "_info":"api documentation"
+        },
+        {
+          "landscapes": "http://vinaynv3.pythonanywhere.com/locations",
+          "_allowed_methods":"GET,POST",
+          "_info":"access list of landscapes, add a new landscape or list of landscapes",
+          "_data_format":"list:dict --> [{name:str,about:str,country:str},...]"
+        },
+        {
+          "landscape": "http://vinaynv3.pythonanywhere.com/locations/<name>",
+          "_allowed_methods":"GET,PUT,DELETE",
+          "_info":"access a landscape details with GET, modify it with PUT and record can be removed through DELETE",
+          "_data_format":"dict --> {name:str,about:str,country:str}"
+        },
+        {
+          "landscape_geography": "http://vinaynv3.pythonanywhere.com/locations/<name>/geo",
+          "_allowed_methods":"GET,PUT,POST,DELETE",
+          "_info":"access a landscape geography details with GET, if record doesn't exist add one with POST, modify existing one with PUT and geography record can be removed through DELETE",
+          "_data_format":"dict --> {lat_long:str,climate:str,landscape:str}"
+        },
+        {
+          "landscape_stats": "http://vinaynv3.pythonanywhere.com/locations/<name>/stats",
+          "_allowed_methods":"GET,PUT,POST,DELETE",
+          "_info":"access a landscape stats details with GET, if record doesn't exist add one with POST, modify existing one with PUT and stats record can be removed through DELETE",
+          "_data_format":"dict --> {yearly_visitors:int,stars:int,above_sealevel:int,unesco_heritage:bool}",
+          "_note":"altitude above sealevel measured in meters(m)"
+        },
+        {
+          "landscape_picture": "http://vinaynv3.pythonanywhere.com/locations/<name>/pic",
+          "_allowed_methods":"GET,PUT,POST",
+          "_info":"access a landscape image with GET, if record doesn't exist add one with POST, modify existing one with PUT.",
+          "_data_format":"dict --> {picture:file}",
+          "_note":"content type:multipart/formdata, allowed extensions ('png', 'jpg', 'jpeg', 'gif')"
+        },
+        {
+          "Dwnld_landscape_picture": "http://vinaynv3.pythonanywhere.com/locations/<name>/pic/<filename>",
+          "_allowed_methods":"GET,DELETE",
+          "_info":"download landscape image with GET, remove it from database with DELETE."
+        },
+        {
+          "species": "http://vinaynv3.pythonanywhere.com/locations/<name>/species",
+          "_allowed_methods":"GET,POST,DELETE",
+          "_info":"access list of species living at location, list of species can be added through POST, caution all species can be removed through DELETE",
+          "_data_format":"list:dict --> [{name:str,endangered:bool,sp_class:str},...]",
+          "_note":"cannot add pictures at this endpoint use per specie path to add one"
+        },
+        {
+          "specie_details": "http://vinaynv3.pythonanywhere.com/locations/<name>/species/<specie_name>",
+          "_allowed_methods":"GET,PUT,DELETE",
+          "_info":"access specie details, can be modified through PUT, caution, remove it through DELETE",
+          "_data_format":"dict --> {name:str,endangered:bool,sp_class:str,pic:file}"
+        },
+        {
+          "specie_picture": "http://vinaynv3.pythonanywhere.com/locations/<name>/species/<specie_name>/<file>",
+          "_allowed_methods":"GET,DELETE",
+          "_info":"download specie image with GET, remove it from database with DELETE."
+        }
+      ]
+    },
+    {
+      "conclusion": " I built this rest api for learning and a great admiration for natural world, I would appreciate any feedback"
+    },
+    {
+      "contact": {
+        "name": "vinay",
+        "email": "vinaynv987@gmail.com",
+        "github": "https://github.com/vinaynv3"
       }
-   ]
+    }
+  ]
 }

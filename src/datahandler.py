@@ -27,7 +27,7 @@ class LocationList:
     def get_list(self):
         locations = Locations.query.all()
         schema = LocationsSchema(many=True)
-        data = dict(landscape_names=schema.dump(locations),\
+        data = dict(landscape_details=schema.dump(locations),\
                     total=len(locations))
         return data
 
@@ -115,7 +115,10 @@ class LocationName:
 
     def get(self):
         location_schema = LocationSchema()
-        return location_schema.dump(self.location_name())
+        location =  self.location_name()
+        if location:
+            return location_schema.dump(location)
+        return {}
 
     def update(self):
         locations_fields = ('name','country','about')
@@ -140,7 +143,7 @@ class LocationName:
         location = self.location_name()
         filename = location.picture
         folder = current_app.config['UPLOAD_FOLDER']
-        for filename.picture in os.listdir(folder):
+        if filename and filename.picture in os.listdir(folder):
             file_path = os.path.join(folder, filename.picture)
             os.remove(file_path)
         database_session(location,delete=True)
@@ -176,7 +179,10 @@ class LocationGeo(LocationName):
 
     def get(self):
         geography_schema = GeographySchema()
-        return geography_schema.dump(self.geography_name())
+        geography = self.geography_name()
+        if geography:
+            return geography_schema.dump(geography)
+        return {}
 
     def post(self):
         if isinstance(self.data,dict) and self.validate_data():
@@ -232,7 +238,10 @@ class LocationStats(LocationName):
 
     def get(self):
         stats_schema = StatsSchema()
-        return stats_schema.dump(self.stats_name())
+        stats = self.stats_name()
+        if stats:
+            return stats_schema.dump(stats)
+        return {}
 
     def post(self):
         if isinstance(self.data,dict) and self.validate_data():

@@ -46,7 +46,6 @@ def save_file(files,model,location,slug,picture=False):
     return {'status':'{0} file already created for record {1}'.format(file.filename,slug)}
 
 
-
 #displays media file from folder ../media/ for download
 def download_file(picture):
     return send_from_directory(current_app.config["UPLOAD_FOLDER"], picture.picture)

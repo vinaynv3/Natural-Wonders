@@ -1,6 +1,7 @@
 
 import os
 import json
+from slugify import slugify
 from flask.views import MethodView
 from flask import request, current_app,redirect, url_for
 from .models import *
@@ -17,6 +18,7 @@ class IndexAPI(MethodView):
         with open("index.json","r") as file:
             data = json.load(file)
             return data
+
 
 #view<endpoint:/locations>
 class LocationsAPI(MethodView):
@@ -41,8 +43,10 @@ class LocationAPI(MethodView):
         return request_data_handler(request,self.__name,placeholder=name)
 
     def put(self, name):
-        if Locations.query.filter_by(slug=name).first_or_404():
+        l = Locations.query.filter_by(slug=name).first_or_404()
+        if l and request.get_json():
             return request_data_handler(request,self.__name,placeholder=name)
+        return {"status":"{0} request payload seems empty, please verify".format(name)}
 
     def delete(self,name):
         if Locations.query.filter_by(slug=name).first_or_404():
@@ -58,16 +62,22 @@ class LocationGeoAPI(MethodView):
             return request_data_handler(request,self.__name,placeholder=name)
 
     def post(self, name):
-        if Locations.query.filter_by(slug=name).first_or_404():
+        l = Locations.query.filter_by(slug=name).first_or_404()
+        if l and request.get_json():
             return request_data_handler(request,self.__name,placeholder=name)
+        return {"status":"{0} request payload seems empty, please verify".format(name)}
 
     def put(self, name):
-        if Locations.query.filter_by(slug=name).first_or_404():
+        l = Locations.query.filter_by(slug=name).first_or_404()
+        if l and l.geography:
             return request_data_handler(request,self.__name,placeholder=name)
+        return {"status":"{0} geography details not found, add a record with POST".format(name)}
 
     def delete(self,name):
-        if Locations.query.filter_by(slug=name).first_or_404():
+        l = Locations.query.filter_by(slug=name).first_or_404()
+        if l and l.geography:
             return request_data_handler(request,self.__name,placeholder=name)
+        return {"status":"{0} geography details not found".format(name)}
 
 
 #view<endpoint:/location/<name>/stats>
@@ -79,16 +89,22 @@ class LocationStatsAPI(MethodView):
             return request_data_handler(request,self.__name,placeholder=name)
 
     def post(self, name):
-        if Locations.query.filter_by(slug=name).first_or_404():
+        l = Locations.query.filter_by(slug=name).first_or_404()
+        if l and request.get_json():
             return request_data_handler(request,self.__name,placeholder=name)
+        return {"status":"{0} request payload seems empty, please verify".format(name)}
 
     def put(self, name):
-        if Locations.query.filter_by(slug=name).first_or_404():
+        l = Locations.query.filter_by(slug=name).first_or_404()
+        if l and l.stats:
             return request_data_handler(request,self.__name,placeholder=name)
+        return {"status":"{0} stats not found, add a record with POST".format(name)}
 
     def delete(self,name):
-        if Locations.query.filter_by(slug=name).first_or_404():
+        l = Locations.query.filter_by(slug=name).first_or_404()
+        if l and l.stats:
             return request_data_handler(request,self.__name,placeholder=name)
+        return {"status":"{0} stats not found".format(name)}
 
 
 #view<endpoint:/location/<name>/pic>
@@ -100,12 +116,16 @@ class LocationPicAPI(MethodView):
             return request_data_handler(request,self.__name,placeholder=name)
 
     def post(self, name):
-        if Locations.query.filter_by(slug=name).first_or_404():
+        l = Locations.query.filter_by(slug=name).first_or_404()
+        if l and request.files:
             return request_data_handler(request,self.__name,placeholder=name)
+        return {"status":"{0} request payload seems empty, please verify".format(name)}
 
     def put(self, name):
-        if Locations.query.filter_by(slug=name).first_or_404():
+        l = Locations.query.filter_by(slug=name).first_or_404()
+        if l and request.files:
             return request_data_handler(request,self.__name,placeholder=name)
+        return {"status":"{0} record or request payload seems empty, please verify".format(name)}
 
 
 #view<endpoint:/location/<name>/pic/pic.jpg>
@@ -119,9 +139,13 @@ class PicDownloadAPI(MethodView):
                                         pic=filename)
 
     def delete(self,name,filename):
-        if Locations.query.filter_by(slug=name).first_or_404():
+        location = Locations.query.filter_by(slug=name).first_or_404()
+        pic_file = location.picture.picture
+        if location and filename == pic_file:
             return request_data_handler(request,self.__name,placeholder=name,\
                                         pic=filename)
+        return {"status":"{0} file not found for record {1}({2}) ".format(filename,name,pic_file)}
+
 
 #view<endpoint:/location/<name>/species>
 class LocationSpeciesAPI(MethodView):
@@ -132,8 +156,10 @@ class LocationSpeciesAPI(MethodView):
             return request_data_handler(request,self.__name,placeholder=name)
 
     def post(self, name):
-        if Locations.query.filter_by(slug=name).first_or_404():
+        l = Locations.query.filter_by(slug=name).first_or_404()
+        if l and request.get_json():
             return request_data_handler(request,self.__name,placeholder=name)
+        return {"status":"{0} species list request payload seems empty, please verify".format(name)}
 
     def delete(self,name):
         if Locations.query.filter_by(slug=name).first_or_404():
@@ -145,22 +171,24 @@ class LocationSpecieAPI(MethodView):
 
     __name = 'LocationSpecieAPI'
     def get(self,name,specie_name):
-        specie = Species.query.filter_by(species_name=specie_name).first_or_404()
+        specie = Species.query.filter_by(sp_slug=specie_name).first_or_404()
         if specie:
             return request_data_handler(request,self.__name,\
                                 placeholder=name,specie=specie_name)
 
     def put(self, name,specie_name):
-        specie = Species.query.filter_by(species_name=specie_name).first_or_404()
-        if specie:
+        specie = Species.query.filter_by(sp_slug=specie_name).first_or_404()
+        if specie and request.data or request.files:
             return request_data_handler(request,self.__name,\
                                 placeholder=name,specie=specie_name)
+        return {"status":"{0} specie request payload seems empty, please verify".format(name)}
 
     def delete(self,name,specie_name):
-        specie = Species.query.filter_by(species_name=specie_name).first_or_404()
+        specie = Species.query.filter_by(sp_slug=specie_name).first_or_404()
         if specie:
             return request_data_handler(request,self.__name,\
                                     placeholder=name,specie=specie_name)
+
 
 #view<endpoint:/locations/<name>/species/<specie_name>/<file>.jpg>
 class SpeciePicDwnldAPI(MethodView):

@@ -30,9 +30,7 @@ class LocationPic(LocationName):
         pic_schema = LocationImageSchema()
         pic = self.pic_name()
         if pic:
-            url = url_for('dwnld_pic',name=self.slug,filename=pic.picture,_method='GET')
-            data = dict(file=pic_schema.dump(pic),_link=url)
-            return data
+            return pic_schema.dump(pic)
         return {}
 
     def post(self):
@@ -84,7 +82,7 @@ class LocationDwnldPic(LocationName):
             filename = self.pic_name()
             if delete_file(filename):
                 return {'status':'{0} deleted for record {1}'.format(filename.picture,self.slug),
-                        'url':url_for('location_picture',name=self.slug,_method='GET')}
+                        '_link':url_for('location_picture',name=self.slug,_method='GET')}
 
     def process_request(self):
         if self.method == 'GET':
@@ -167,9 +165,7 @@ class LocationSpecie(LocationName):
         sp_schema = SpeciesSchema()
         specie_serializer = sp_schema.dump(self.specie_name())
         if self.specie_name().pic:
-            url = url_for('specie_dwnld_pic', name=self.slug, specie_name=self.specie_name().sp_slug,
-                                                file=self.specie_name().pic,_method='GET')
-            return dict(specie=specie_serializer,pic_link=url)
+            return specie_serializer
         return specie_serializer
 
     def file_handler(self):
