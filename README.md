@@ -55,12 +55,15 @@ A list of technologies used within the project:
 ***
 A little intro about the installation. 
 ```
-$ git clone https://example.com
+$ git clone https://github.com/vinaynv3/Natural-Wonders.git
 $ cd ../path/to/the/file
-$ npm install
-$ npm start
+$ python3 -m venv <name_of_virtualenv>
+$ pip install -r requirements.txt
+$ cd app/scripts
+$ bash db_setup.sh    #intialize database
+$ bash dev_server.sh  #starts flask development server
 ```
-Side information: To use the application in a special environment use ```lorem ipsum``` to start
+Side information: To start the application  use ```flask run``` verify app env variable ```export FLASK_APP=<app_name>```
 ## Collaboration
 ***
-Give instructions on how to collaborate with your project.
+I built natural api for educational purpose and with a great admiration for the natural world, if you see any issues,let me know or any feedback would be appreciated.
