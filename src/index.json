@@ -46,32 +46,32 @@
           "_info":"api documentation"
         },
         {
-          "landscapes": "http://vinaynv3.pythonanywhere.com/locations",
+          "landscapes": "http://vinaynv3.pythonanywhere.com/locations/",
           "_allowed_methods":"GET,POST",
           "_info":"access list of landscapes, add a new landscape or list of landscapes",
           "_data_format":"list:dict --> [{name:str,about:str,country:str},...]"
         },
         {
-          "landscape": "http://vinaynv3.pythonanywhere.com/locations/<name>",
+          "landscape": "http://vinaynv3.pythonanywhere.com/locations/<name>/",
           "_allowed_methods":"GET,PUT,DELETE",
           "_info":"access a landscape details with GET, modify it with PUT and record can be removed through DELETE",
           "_data_format":"dict --> {name:str,about:str,country:str}"
         },
         {
-          "landscape_geography": "http://vinaynv3.pythonanywhere.com/locations/<name>/geo",
+          "landscape_geography": "http://vinaynv3.pythonanywhere.com/locations/<name>/geo/",
           "_allowed_methods":"GET,PUT,POST,DELETE",
           "_info":"access a landscape geography details with GET, if record doesn't exist add one with POST, modify existing one with PUT and geography record can be removed through DELETE",
           "_data_format":"dict --> {lat_long:str,climate:str,landscape:str}"
         },
         {
-          "landscape_stats": "http://vinaynv3.pythonanywhere.com/locations/<name>/stats",
+          "landscape_stats": "http://vinaynv3.pythonanywhere.com/locations/<name>/stats/",
           "_allowed_methods":"GET,PUT,POST,DELETE",
           "_info":"access a landscape stats details with GET, if record doesn't exist add one with POST, modify existing one with PUT and stats record can be removed through DELETE",
           "_data_format":"dict --> {yearly_visitors:int,stars:int,above_sealevel:int,unesco_heritage:bool}",
           "_note":"altitude above sealevel measured in meters(m)"
         },
         {
-          "landscape_picture": "http://vinaynv3.pythonanywhere.com/locations/<name>/pic",
+          "landscape_picture": "http://vinaynv3.pythonanywhere.com/locations/<name>/pic/",
           "_allowed_methods":"GET,PUT,POST",
           "_info":"access a landscape image with GET, if record doesn't exist add one with POST, modify existing one with PUT.",
           "_data_format":"dict --> {picture:file}",
@@ -83,14 +83,14 @@
           "_info":"download landscape image with GET, remove it from database with DELETE."
         },
         {
-          "species": "http://vinaynv3.pythonanywhere.com/locations/<name>/species",
+          "species": "http://vinaynv3.pythonanywhere.com/locations/<name>/species/",
           "_allowed_methods":"GET,POST,DELETE",
           "_info":"access list of species living at location, list of species can be added through POST, caution all species can be removed through DELETE",
           "_data_format":"list:dict --> [{name:str,endangered:bool,sp_class:str},...]",
           "_note":"cannot add pictures at this endpoint use per specie path to add one"
         },
         {
-          "specie_details": "http://vinaynv3.pythonanywhere.com/locations/<name>/species/<specie_name>",
+          "specie_details": "http://vinaynv3.pythonanywhere.com/locations/<name>/species/<specie_name>/",
           "_allowed_methods":"GET,PUT,DELETE",
           "_info":"access specie details, can be modified through PUT, caution, remove it through DELETE",
           "_data_format":"dict --> {name:str,endangered:bool,sp_class:str,pic:file}"
