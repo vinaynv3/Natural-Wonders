@@ -46,8 +46,8 @@ For api documentation see link http://vinaynv3.pythonanywhere.com/
 ## Technologies
 ***
 A list of technologies used within the project:
-- Python3 (v 3.8.10)
-* [Flask]: Version 2.0.2
+- Python3 (version 3.8.10)
+* [Flask](https://flask.palletsprojects.com/en/2.0.x/): version 2.0.2
 * [WSGI Server - Werkzeug]: Version 2.0.2
 * [bash - linux shell]: Version 5.0.1.7
 
