@@ -6,13 +6,14 @@ Landscape climate, latitude/longitude, type information is associated with geogr
 <img src="./src/static/species.jpg " alt="InfiniteGraph Logo" width="960" height="330">
 
 ## Table of Contents
-1. [API Schema](#overview)
+1. [Docs](#Docs)
 2. [Technologies](#technologies)
 3. [Installation](#installation)
 4. [Collaboration](#instructions)
 5. [FAQs](#faqs)
-### API Schema
+### Docs
 ***
+For api documentation see link http://vinaynv3.pythonanywhere.com/
 ```
       "landscape_details_schema:list": [
         {
@@ -45,9 +46,10 @@ Landscape climate, latitude/longitude, type information is associated with geogr
 ## Technologies
 ***
 A list of technologies used within the project:
-* [Technology name](https://example.com): Version 12.3 
-* [Technology name](https://example.com): Version 2.34
-* [Library name](https://example.com): Version 1234
+* [Python3]: Version 3.8.10
+* [Flask]: Version 2.0.2
+* [WSGI Server - Werkzeug]: Version 2.0.2
+
 ## Installation
 ***
 A little intro about the installation. 
