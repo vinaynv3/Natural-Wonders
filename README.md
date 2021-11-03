@@ -60,7 +60,7 @@ A list of technologies used within the project:
 
 ## Installation
 ***
-app nstallation steps. 
+app installation steps. 
 ```
 $ git clone https://github.com/vinaynv3/Natural-Wonders.git
 $ cd ../path/to/the/file
@@ -73,4 +73,4 @@ $ bash dev_server.sh  #starts flask development server
 Side information: To start the application  use ```flask run``` if you see any issue, verify ```FLASK_APP``` variable ```export FLASK_APP=<app_name>```
 ## FinalWords
 ***
-I this built this for eductional purpose, if you see any issues,let me know or any feedback would be appreciated, finally I value keeping my site open source, yes, you can use this code.
+I built this for eductional purpose, if you see any issues,let me know or any feedback would be appreciated, finally I value keeping my site open source, yes, you can use this code.
