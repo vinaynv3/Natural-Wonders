@@ -9,7 +9,7 @@ Landscape climate, latitude/longitude, type information is associated with geogr
 1. [Docs](#docs)
 2. [Technologies](#technologies)
 3. [Installation](#installation)
-4. [Final Words](#final words)
+4. [FinalWords](#finalwords)
 
 ### Docs
 ***
@@ -71,6 +71,6 @@ $ bash db_setup.sh    #intialize database
 $ bash dev_server.sh  #starts flask development server
 ```
 Side information: To start the application  use ```flask run``` if you see any issue, verify ```FLASK_APP``` variable ```export FLASK_APP=<app_name>```
-## Final Words
+## FinalWords
 ***
 I this built this for eductional purpose, if you see any issues,let me know or any feedback would be appreciated, finally I value keeping my site open source, yes, you can use this code.
