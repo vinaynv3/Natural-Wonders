@@ -1,19 +1,24 @@
 <h1 align="center">Natural Wonders</h1>
 
-REST API contains detailed information about some of the magnificent, beautiful and breathtaking landscapes around the world, each landscape introduces itself with its name, location and description,followed by landscape properties such as geography, statistics and flora fauna living at the location, every landscape has one picture, and several pictures of the species. 
-Landscape climate, latitude/longitude, type information is associated with geography, total annual visitors, popularity (stars), altitude above sea level , unesco recognitation status can be found in key stats, finally species live at the location are categorized based on  species name, picture, class, endangered status can be found in keyword species.
+Natural Wonders is a repository API that contains detailed information about some of the magnificent, beautiful and breathtaking landscapes around the world, each landscape has extensive APIs that help in introducing each landscape's name, country its located in and a brief description about itself. Landscape extensive APIs help in adding and managing its geography, statistics and flora fauna, every landscape has one picture, and associated pictures of the species live in there. 
+Landscape climate, latitude/longitude, type information is associated with geography key, total annual visitors, popularity (stars), altitude above sea level , UNESCO recognition status can be found in under key called stats, finally species live in there are been classified based on  specie name, picture, class(mammal,reptile,bird,etc.,), endangered status can be found in keyword species.
 ![image](https://github.com/vinaynv3/Natural-Wonders/blob/master/src/static/naturalwonders.jpg)
 <img src="./src/static/species.jpg " alt="InfiniteGraph Logo" width="960" height="330">
 
 ## Table of Contents
-1. [Docs](#Docs)
+1. [Docs](#docs)
 2. [Technologies](#technologies)
 3. [Installation](#installation)
-4. [Collaboration](#instructions)
-5. [FAQs](#faqs)
+4. [FinalWords](#finalwords)
+
 ### Docs
 ***
-read api documentation details at  [natural_wonders_docs](http://vinaynv3.pythonanywhere.com/)
+APIs documentation details, see  [natural_wonders_docs](http://vinaynv3.pythonanywhere.com/)
+#### Code Snippet - Shell
+```
+curl -request GET --url https://vinaynv3.pythonanywhere.com/locations/
+```
+Note: if you see any redirection issues, please endpoint has a ```/``` trailing slash. It’s similar to a folder in a file system. 
 #### API Schema
 ```
       landscape_details_schema:list: [
@@ -44,6 +49,7 @@ read api documentation details at  [natural_wonders_docs](http://vinaynv3.python
            }
          ]
 ```
+
 ## Technologies
 ***
 A list of technologies used within the project:
@@ -54,7 +60,7 @@ A list of technologies used within the project:
 
 ## Installation
 ***
-app nstallation steps. 
+app installation steps. 
 ```
 $ git clone https://github.com/vinaynv3/Natural-Wonders.git
 $ cd ../path/to/the/file
@@ -64,7 +70,7 @@ $ cd app/scripts
 $ bash db_setup.sh    #intialize database
 $ bash dev_server.sh  #starts flask development server
 ```
-Side information: To start the application  use ```flask run``` verify app env variable ```export FLASK_APP=<app_name>```
-## Collaboration
+Side information: To start the application  use ```flask run``` if you see any issue, verify ```FLASK_APP``` variable ```export FLASK_APP=<app_name>```
+## FinalWords
 ***
-I this built natural api for educational purpose, if you see any issues,let me know or any feedback would be appreciated.
+I built this for eductional purpose, if you see any issues,let me know or any feedback would be appreciated, finally I value keeping my site open source, yes, you can use this code.
