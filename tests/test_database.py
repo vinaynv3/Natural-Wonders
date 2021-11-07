@@ -10,8 +10,8 @@ from src.serializer import *
 @pytest.fixture
 def client():
     db_fd,db_path = tempfile.mkstemp()
-
-    app = create_app({'TESTING': True, 'DATABASE': db_path})
+    app = create_app({'TESTING': True, 'DATABASE': db_path,
+                    'SQLALCHEMY_TRACK_MODIFICATIONS':False})
     with app.test_client() as client:
         with app.app_context():
             init_db(app)
@@ -23,12 +23,14 @@ def client():
 def test_empty_db(client):
     """Start with a blank database."""
 
-    rv = client.get('/')
-    assert b'No' in rv.data
+    get = client.get('/')
+    assert b'natural_wonders_api_docs' in get.data
 
 def test_models(client):
+    print(dir(client))
+    data = dict(name = "Algonquin park",country="on,canada"\
+                        ,about = "Its a beautiful water park")
 
-    user = Locations(name = "Niagara Falls",country="canada"\
-                        ,about = "Its a beautiful water falls")
-    user_schema = LocationsSchema()
-    assert {} != user_schema.dump(user)
+    location = Locations(data)
+    locations_schema = LocationsSchema()
+    assert {} != locations_schema.dump(location)
