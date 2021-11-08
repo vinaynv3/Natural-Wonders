@@ -1,8 +1,20 @@
-NaturalWonders REST API
-========================
+.. naturalwonders documentation master file, created by
+   sphinx-quickstart on Mon Nov  8 17:58:37 2021.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
 
-Interaction with NaturalWonders repository api occurs via a REST API. Full documentation
-of the API is available at `https://vinaynv3.pythonanywhere.com/`__
+Welcome to naturalwonders's documentation!
+==========================================
 
-In this documentation, we'll provide you with some helpful examples of various
-end points. We'll be using Python for these examples.
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
