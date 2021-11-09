@@ -19,7 +19,6 @@ class IndexAPI(MethodView):
             data = json.load(file)
             return data
 
-
 #view<endpoint:/locations>
 class LocationsAPI(MethodView):
 

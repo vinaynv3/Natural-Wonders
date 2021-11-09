@@ -1,6 +1,6 @@
 <h1 align="center">Natural Wonders</h1>
 
-Natural Wonders is a repository API that contains detailed information about some of the magnificent, beautiful and breathtaking landscapes around the world, each landscape has extensive APIs that help in introducing each landscape's name, country its located in and a brief description about itself. Landscape extensive APIs help in adding and managing its geography, statistics and flora fauna, every landscape has one picture, and associated pictures of the species live in there. 
+Natural Wonders is a repository API that contains detailed information about some of the magnificent, beautiful and breathtaking landscapes around the world, each landscape has extensive APIs that help in introducing each landscape's name, country its located in and a brief description about itself. Landscape extensive APIs help in adding and managing its geography, statistics and flora fauna, every landscape has one picture, and associated pictures of the species live in there.
 Landscape climate, latitude/longitude, type information is associated with geography key, total annual visitors, popularity (stars), altitude above sea level , UNESCO recognition status can be found in under key called stats, finally species live in there are been classified based on  specie name, picture, class(mammal,reptile,bird,etc.,), endangered status can be found in keyword species.
 ![image](https://github.com/vinaynv3/Natural-Wonders/blob/master/src/static/naturalwonders.jpg)
 <img src="./src/static/species.jpg " alt="InfiniteGraph Logo" width="960" height="330">
@@ -13,12 +13,12 @@ Landscape climate, latitude/longitude, type information is associated with geogr
 
 ### Docs
 ***
-APIs documentation details, see  [natural_wonders_docs](http://vinaynv3.pythonanywhere.com/)
+APIs documentation details, see  [docs](https://natural-wonders.readthedocs.io/)
 #### Code Snippet - Shell
 ```
 curl -request GET --url https://vinaynv3.pythonanywhere.com/locations/
 ```
-Note: if you see any redirection issues, please endpoint has a ```/``` trailing slash. It’s similar to a folder in a file system. 
+Note: if you see any redirection issues, please endpoint has a ```/``` trailing slash. It’s similar to a folder in a file system.
 #### API Schema
 ```
       landscape_details_schema:list: [
@@ -60,7 +60,7 @@ A list of technologies used within the project:
 
 ## Installation
 ***
-app installation steps. 
+app installation steps.
 ```
 $ git clone https://github.com/vinaynv3/Natural-Wonders.git
 $ cd ../path/to/the/file
