@@ -6,106 +6,272 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Welcome to naturalwonders’s documentation! &#8212; naturalwonders v1.0.0 documentation</title>
+    <title>Natural Wonders REST API Docs &#8212; Naturalwonders v1.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="search" title="Search" href="search.html" /> 
   </head><body>
-  
+      <div class="header" role="banner"><h1 class="heading"><a href="#">
+          <span>Naturalwonders v1.0.0 documentation</span></a></h1>
+        <h2 class="heading"><span>Natural Wonders REST API Docs</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="#">Contents</a>
+        </p>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          
-
-          <div class="body" role="main">
-            
-  <section id="welcome-to-naturalwonders-s-documentation">
-<h1>Welcome to naturalwonders’s documentation!<a class="headerlink" href="#welcome-to-naturalwonders-s-documentation" title="Permalink to this headline">¶</a></h1>
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="natural-wonders-rest-api-docs">
+<h1>Natural Wonders REST API Docs<a class="headerlink" href="#natural-wonders-rest-api-docs" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Repository API that contains detailed information about some of the magnificent,
+beautiful and breathtaking landscapes around the world, each landscape has
+extensive APIs that help in introducing each landscape’s name, country its
+located in and a brief description about itself.
+Landscape extensive APIs help in adding and managing its geography, statistics
+and flora fauna, every landscape has one picture, and associated pictures of
+the species live in there. Landscape climate, latitude/longitude, type
+information is associated with geography key, total annual visitors,
+popularity (stars), altitude above sea level , UNESCO recognition status can
+be found in under key called stats, finally species live in there are been
+classified based on specie name,picture, class (mammal,reptile,bird,etc.,),
+endangered status can be found in keyword species.</p>
 </section>
-<section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>To experiment natural wonders code, follow the steps below and
+install it using pip:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git clone https://github.com/vinaynv3/Natural-Wonders.git
+<span class="gp">$ </span><span class="nb">cd</span> ../path/to/the/file
+<span class="gp">$ </span>python3 -m venv &lt;name_of_virtualenv&gt;
+<span class="gp">$ </span>pip install -r requirements.txt
+<span class="gp">$ </span><span class="nb">cd</span> app/scripts
+<span class="gp">$ </span>bash db_setup.sh    <span class="c1">#intialize database</span>
+<span class="gp">$ </span>bash dev_server.sh  <span class="c1">#starts flask development server</span>
+</pre></div>
+</div>
 </section>
-
-
-          </div>
-          
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="#">naturalwonders</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-
-<div class="relations">
-<h3>Related Topics</h3>
+<section id="api-schema">
+<h2>API schema<a class="headerlink" href="#api-schema" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">[</span>
+<span class="go">{</span>
+<span class="go">  name: &lt;str:required&gt;,</span>
+<span class="go">  about: &lt;str:required&gt;,</span>
+<span class="go">  country: &lt;str:required&gt;&quot;,</span>
+<span class="go">  Picture: {</span>
+<span class="go">    picture: &lt;img_file&gt;</span>
+<span class="go">  },</span>
+<span class="go">  Geography: {</span>
+<span class="go">    lat_long: &lt;str&gt;,</span>
+<span class="go">    climate: &lt;str:required&gt;,</span>
+<span class="go">    landscape&quot;: &lt;str:required&gt;</span>
+<span class="go">  },</span>
+<span class="go">  stats: {</span>
+<span class="go">    yearly_visitors: &lt;int&gt;,</span>
+<span class="go">    stars: &lt;str&gt;,</span>
+<span class="go">    altitude: &lt;str&gt;,</span>
+<span class="go">    unesco_heritage: &lt;bool&gt;</span>
+<span class="go">  },</span>
+<span class="go">  species: {</span>
+<span class="go">    species_name: &lt;str:required&gt;,</span>
+<span class="go">    endangered: &lt;bool&gt;,</span>
+<span class="go">    pic: &lt;file&gt;,</span>
+<span class="go">    sp_class: &lt;str&gt;</span>
+<span class="go">            }</span>
+<span class="go">   }</span>
+<span class="go"> ]</span>
+</pre></div>
+</div>
+</section>
+<section id="endpoints">
+<h2>Endpoints<a class="headerlink" href="#endpoints" title="Permalink to this headline">¶</a></h2>
 <ul>
-  <li><a href="#">Documentation overview</a><ul>
-  </ul></li>
+<li><p>Access list of landscapes, add a new landscape or list of landscapes</p>
+<blockquote>
+<div><p><a class="reference external" href="http://vinaynv3.pythonanywhere.com/locations/">http://vinaynv3.pythonanywhere.com/locations/</a></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">import requests</span>
+<span class="go">requests.get(&#39;http://vinaynv3.pythonanywhere.com/locations/&#39;)</span>
+
+<span class="go">[{&#39;name&#39;: &#39;amazon rainforest&#39;,</span>
+<span class="go">  &#39;about&#39;: &#39;There is no place on earth quite like it,....&#39;</span>
+<span class="go">  &#39;country&#39;: &#39;south america (brazil,peru,columbia)&#39;,</span>
+<span class="go">  &#39;geography&#39;: {&#39;climate&#39;: &#39;tropical&#39;,</span>
+<span class="go">                &#39;landscape&#39;: &#39;forest&#39;,</span>
+<span class="go">                &#39;lat_long&#39;: &#39;3.4653° S, 62.2159° W&#39;},</span>
+<span class="go">  &#39;picture&#39;: {&#39;_dwnld&#39;: &#39;/locations/amazon-rainforest/pic/amazon.jpg&#39;,</span>
+<span class="go">              &#39;picture&#39;: &#39;amazon.jpg&#39;},</span>
+<span class="go">  &#39;stats&#39;: {&#39;above_sealevel&#39;: 105,</span>
+<span class="go">            &#39;stars&#39;: 1,</span>
+<span class="go">            &#39;unesco_heritage&#39;: True,</span>
+<span class="go">            &#39;yearly_visitors&#39;: 10000}},</span>
+<span class="go">  &#39;species&#39;:</span>
+<span class="go">  [{&#39;_dwnld_pic&#39;:</span>
+<span class="go">  &#39;/locations/amazon-rainforest/species/parrots/parrots.png&#39;,</span>
+<span class="go">  &#39;_specie&#39;: &#39;/locations/amazon-rainforest/species/parrots/&#39;,</span>
+<span class="go">  &#39;endangered&#39;: False,</span>
+<span class="go">  &#39;pic&#39;: &#39;parrots.png&#39;,</span>
+<span class="go">  &#39;sp_class&#39;: &#39;bird&#39;,</span>
+<span class="go">  &#39;sp_slug&#39;: &#39;parrots&#39;,</span>
+<span class="go">  &#39;species_name&#39;: &#39;parrots&#39;},</span>
+<span class="go">{&#39;_dwnld_pic&#39;: &#39;/locations/amazon-rainforest/species/myrtle/myrtle.jpg&#39;,</span>
+<span class="go">.....}.....]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">methods</dt>
+<dd class="field-odd"><p>GET,POST</p>
+</dd>
+<dt class="field-even">return</dt>
+<dd class="field-even"><p>list:[dict:{name:str,about:str,country:str},…]</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+<li><p>Access a landscape details with GET, modify it with PUT and record can be
+removed through DELETE</p>
+<p><a class="reference external" href="http://vinaynv3.pythonanywhere.com/locations">http://vinaynv3.pythonanywhere.com/locations</a>/{name}/</p>
+<dl class="field-list simple">
+<dt class="field-odd">methods</dt>
+<dd class="field-odd"><p>GET,PUT,DELETE</p>
+</dd>
+<dt class="field-even">return</dt>
+<dd class="field-even"><p>dict:{name:str,about:str,country:str}</p>
+</dd>
+</dl>
+</li>
+<li><p>Access a landscape geography details with GET, if record doesn’t exist add
+one with POST, modify existing one with PUT and geography record can be
+removed through DELETE</p>
+<p><a class="reference external" href="http://vinaynv3.pythonanywhere.com/locations">http://vinaynv3.pythonanywhere.com/locations</a>/{name}/geo/</p>
+<dl class="field-list simple">
+<dt class="field-odd">methods</dt>
+<dd class="field-odd"><p>GET,POST,PUT,DELETE</p>
+</dd>
+<dt class="field-even">return</dt>
+<dd class="field-even"><p>dict:{lat_long:str,climate:str,landscape:str}</p>
+</dd>
+</dl>
+</li>
+<li><p>Access a landscape stats details with GET, if record doesn’t exist add one
+with POST, modify existing one with PUT and stats record can be removed
+through DELETE</p>
+<p><a class="reference external" href="http://vinaynv3.pythonanywhere.com/locations">http://vinaynv3.pythonanywhere.com/locations</a>/{name}/stats/</p>
+<dl class="field-list simple">
+<dt class="field-odd">methods</dt>
+<dd class="field-odd"><p>GET,POST,PUT,DELETE</p>
+</dd>
+<dt class="field-even">return</dt>
+<dd class="field-even"><p>dict:{yearly_visitors:int,stars:int,above_sealevel:int,
+unesco_heritage:bool}</p>
+</dd>
+<dt class="field-odd">note</dt>
+<dd class="field-odd"><p>altitude above sealevel measured in meters(m)</p>
+</dd>
+</dl>
+</li>
+<li><p>Access a landscape image with GET, if record doesn’t exist add one with
+POST, modify existing one with PUT.</p>
+<p><a class="reference external" href="http://vinaynv3.pythonanywhere.com/locations">http://vinaynv3.pythonanywhere.com/locations</a>/{name}/pic/</p>
+<dl class="field-list simple">
+<dt class="field-odd">methods</dt>
+<dd class="field-odd"><p>GET,POST,PUT,DELETE</p>
+</dd>
+<dt class="field-even">return</dt>
+<dd class="field-even"><p>dict: {picture:file}</p>
+</dd>
+<dt class="field-odd">note</dt>
+<dd class="field-odd"><p>content type:multipart/formdata, allowed extensions
+(‘png’, ‘jpg’, ‘jpeg’, ‘gif’)</p>
+</dd>
+</dl>
+</li>
+<li><p>Download landscape image with GET, remove it from database with DELETE.</p>
+<p><a class="reference external" href="http://vinaynv3.pythonanywhere.com/locations">http://vinaynv3.pythonanywhere.com/locations</a>/{name}/pic/{filename}</p>
+<dl class="field-list simple">
+<dt class="field-odd">methods</dt>
+<dd class="field-odd"><p>GET,DELETE</p>
+</dd>
+<dt class="field-even">return</dt>
+<dd class="field-even"><p>file:{image}</p>
+</dd>
+</dl>
+</li>
+<li><p>Access list of species living at location, list of species can be added
+through POST, caution, all species can be removed through DELETE</p>
+<blockquote>
+<div><p><a class="reference external" href="http://vinaynv3.pythonanywhere.com/locations">http://vinaynv3.pythonanywhere.com/locations</a>/{name}/species/</p>
+<dl class="field-list simple">
+<dt class="field-odd">methods</dt>
+<dd class="field-odd"><p>GET,POST,DELETE</p>
+</dd>
+<dt class="field-even">return</dt>
+<dd class="field-even"><p>list:[dict:{name:str,endangered:bool,sp_class:str},…]</p>
+</dd>
+<dt class="field-odd">note</dt>
+<dd class="field-odd"><p>cannot add picture at this endpoint, use per specie path to add one</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+<li><p>Access specie details, can be modified through PUT, caution, remove it
+through DELETE</p>
+<p><a class="reference external" href="http://vinaynv3.pythonanywhere.com/locations">http://vinaynv3.pythonanywhere.com/locations</a>/{name}/species/{specie_name}/</p>
+<dl class="field-list simple">
+<dt class="field-odd">methods</dt>
+<dd class="field-odd"><p>GET,PUT,DELETE</p>
+</dd>
+<dt class="field-even">return</dt>
+<dd class="field-even"><p>dict:{name:str,endangered:bool,sp_class:str,pic:file}</p>
+</dd>
+</dl>
+</li>
+<li><p>Download specie image with GET, remove it from database with DELETE</p>
+<p><a class="reference external" href="http://vinaynv3.pythonanywhere.com/locations">http://vinaynv3.pythonanywhere.com/locations</a>/{name}/species/{specie_name}/{file}</p>
+<dl class="field-list simple">
+<dt class="field-odd">methods</dt>
+<dd class="field-odd"><p>GET,PUT,DELETE</p>
+</dd>
+<dt class="field-even">return</dt>
+<dd class="field-even"><p>dict:{name:str,endangered:bool,sp_class:str,pic:file}</p>
+</dd>
+</dl>
+</li>
 </ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+</section>
+<section id="contribute">
+<h2>Contribute<a class="headerlink" href="#contribute" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Issue Tracker: <a class="reference external" href="https://github.com/vinaynv3/Natural-Wonders/issues">https://github.com/vinaynv3/Natural-Wonders/issues</a></p></li>
+<li><p>Source Code: <a class="reference external" href="https://github.com/vinaynv3/Natural-Wonders/">https://github.com/vinaynv3/Natural-Wonders/</a></p></li>
+</ul>
+</section>
+</section>
 
 
-
-
-
-
-
-
-        </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2021, vinay.
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
       
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="_sources/index.rst.txt"
-          rel="nofollow">Page source</a>
+        <p>
+        <a class="uplink" href="#">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, vinays project.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
-
-    
-
-    
   </body>
 </html>
